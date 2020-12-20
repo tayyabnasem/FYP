@@ -1,0 +1,117 @@
+<div class="wrapper">
+    <nav id="sidebar" [ngClass]="{'active':isOpen}">
+        <div class="sidebar-header">
+            <h3>Deep Learning Studio</h3>
+            <strong>BS</strong>
+        </div>
+
+        <ul class="list-unstyled components">
+            <li>
+                <a routerLink="/description" routerLinkActive="active">
+                    <i class="fas fa-question"></i>
+                    Description
+                </a>
+            </li>
+            <li class="active">
+                <a routerLink="/preprocess" routerLinkActive="active" data-toggle="collapse" aria-expanded="false">
+                    <i class="fas fa-home"></i>
+                    PreProcessing
+                </a>
+
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fas fa-briefcase"></i>
+                    Visualization
+                </a>
+                <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false">
+                    <i class="fas fa-copy"></i>
+                    Model
+                </a>
+
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fas fa-image"></i>
+                    Training
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fas fa-question"></i>
+                    Results
+                </a>
+            </li>
+        </ul>
+
+
+    </nav>
+
+    <!-- Page Content  -->
+    <div id="content">
+
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+
+                <button (click)="onClick()" type="button" id="sidebarCollapse" class="btn btn-info">
+                    <i class="fas fa-align-left"></i>
+                    <span>Hide Sidebar</span>
+                </button>
+                <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse"
+                    data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <i class="fas fa-align-justify"></i>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item active">
+                            <a class="nav-link" href="#">Profile</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <h1>Project Description</h1>
+        <br>
+        <form #descriptform="ngForm" (ngSubmit)="onSubmit()">
+            <h5>Enter Project Name</h5>
+            <textarea name="name" [(ngModel)]="model.name" rows="1" cols="75" #name="ngModel"></textarea>
+            <br>
+            <br>
+            <h5>Enter Project Description</h5>
+            <textarea name="description" [(ngModel)]="model.description" rows="2" cols="75"
+                #description="ngModel"></textarea>
+            <br>
+            <br>
+            <h5>Choose your Domain</h5>
+            <span id="radio2">
+                <input type="radio" id="ML" name="ML" value="ML" [(ngModel)]="selectedRadio" (click)="onRadioClick()" />
+                <label for="ML">Machine Learning</label>
+            </span>
+            <input type="radio" id="DL" name="DL" value="DL" [(ngModel)]="selectedRadio" (click)="onRadioClick()" />
+            <label for="DL">Deep Learning</label>
+            <div *ngIf="isValid && isVisible">
+
+                <select id="ML" name="ML">
+                    <option value="Classification">Classification</option>
+                    <option value="Regression"> Regression</option>
+                    <option value="Clustering"> Clustering</option>
+                </select>
+            </div>
+
+            <div *ngIf="!isValid  && isVisible">
+
+                <select id="DL" name="DL">
+                    <option value="ANN">ANN</option>
+                    <option value="RNN">RNN</option>
+                    <option value="LSTM">LSTM</option>
+                </select>
+            </div>
+        </form>
+        <div class="nbtn">
+            <button type="button" class="btn btn-success btn-s" (click)="next()">Next</button>
+        </div>
+
+    </div>
+</div>

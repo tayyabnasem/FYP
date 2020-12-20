@@ -1,0 +1,24 @@
+<html>
+
+<head>
+    <title>Sign Up</title>
+</head>
+<body>
+    <div class="center">
+        <p class="stext">Sign Up</p>
+        <form #signUpForm="ngForm" (ngSubmit)="onSubmit()">
+            <input class="un" required name="fullName" [(ngModel)]="model.fullName" type="text" placeholder="Full Name" >
+            <!-- <div *ngIf="signUpForm.submitted && fullName.errors" class="text-danger">First name is required</div> -->
+            <input class="un" name="userName" ngModel type="text" [(ngModel)]="model.userName" placeholder="Username">
+            <input class="un" name="email" ngModel type="email" [(ngModel)]="model.email" placeholder="Email">
+            <input class="un" name="password" ngModel type="password" [(ngModel)]="model.password" placeholder="Password">
+            <input class="un" name="confPassword" ngModel type="password" [(ngModel)]="model.confPassword" placeholder="Confirm Password" ><br>
+            <input type="checkbox">
+            <label style="margin-left: 10px; color: rgb(38, 50, 56)">Agree to Terms & conditions</label>
+            <br>
+            <button type="submit" class="sbtn">Sign up</button>
+        </form>
+    </div>
+</body>
+
+</html>

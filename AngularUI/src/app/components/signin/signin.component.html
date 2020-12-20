@@ -1,0 +1,12 @@
+<div class="center">
+    <p class="ltext">Login</p>
+    <form #signinForm="ngForm" (ngSubmit)="onSubmit()">
+        <input class="un" name="userName" [(ngModel)]="model.userName" type="text" placeholder="Username">
+        <br>
+        <input class="un" name="password" [(ngModel)]="model.password" type="password" placeholder="password">
+        <br>
+        <button class="lbtn" type="submit">Login</button>
+        <p class="forgot">Forgot Password?</p>
+        <p class="a">Create an account? <a href="">Sign up</a></p>
+    </form>
+</div>

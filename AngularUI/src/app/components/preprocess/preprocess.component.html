@@ -1,0 +1,178 @@
+<head>
+    <title>Deep Learning Studio</title>
+</head>
+
+<body>
+    <div class="wrapper">
+        <!-- Sidebar  -->
+        <nav id="sidebar" [ngClass]="{'active':isOpen}">
+            <div class="sidebar-header">
+                <h3>Deep Learning Studio</h3>
+                <strong>BS</strong>
+            </div>
+
+            <ul class="list-unstyled components">
+                <li>
+                    <a href="#">
+                        <i class="fas fa-address-book"></i>
+                        Description
+                    </a>
+                </li>
+                <li class="active">
+                    <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                        <i class="fas fa-random"></i>
+                        PreProcessing
+                    </a>
+
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="fas fa-images"></i>
+                        Visualization
+                    </a>
+                    <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                        <i class="fas fa-copy"></i>
+                        Model
+                    </a>
+
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="fas fa-image"></i>
+                        Training
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="fas fa-question"></i>
+                        Results
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Page Content  -->
+        <div id="content">
+
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <div class="container-fluid">
+
+                    <button (click)="onClick()" type="button" id="sidebarCollapse" class="btn btn-info">
+                        <i class="fas fa-align-left"></i>
+                        <span>Hide Sidebar</span>
+                    </button>
+                    <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse"
+                        data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                        <i class="fas fa-align-justify"></i>
+                    </button>
+
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="nav navbar-nav ml-auto">
+                            <li class="nav-item active">
+                                <a class="nav-link" href="#">Profile</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+
+            <h1>Pre Processing</h1>
+            <br>
+            <h4>Upload the Dataset</h4>
+            <form>
+                <div class="progress form-group" >
+                    <div class="progress-bar bg-success" role="progressbar" [style.width.%]="progress">
+                    </div>
+                </div>
+                <label class="sfile" for="upload-photo">
+                    <img src="https://www.flaticon.com/svg/static/icons/svg/1828/1828817.svg" width="20px"
+                        height="auto">Select the file</label>
+                <input type="file" name="photo" id="upload-photo" ng2FileSelect [uploader]="uploader" accept=".csv, .json"/>
+
+                <button type="button" class="btn btn-success btn-s" (click)="uploader.uploadAll()"
+                    [disabled]="!uploader.getNotUploadedItems().length">
+                    Upload
+                </button>
+            </form>
+            <br>
+            <div class="split">
+                <div style="width:60%">
+                    <form #columnSelectForm="ngForm" (ngSubmit)="onFilterData()">
+                        <table style="width:100%">
+                            <tr>
+                                <th style="width:25%" >Columns</th>
+                                <th style="width:25%">Include</th>
+                                <th style="width:25%">Impute With</th>
+                            </tr>
+                            <tr *ngFor="let item of columnsData; let i = index;">
+                                <td style="cursor: pointer" (click)="onColumnClick(i)">{{item.name}}</td>
+                                <td><label class="switch">
+                                        <input type="checkbox" name="{{item.name}}" (click)="onColumnSelect(item.name, i)">
+                                        <span class="slider round"></span>
+                                    </label></td>
+                                <td>
+                                    <div class="dropdown">
+                                        <select id="impute" name="imputeChoice" [(ngModel)]="model[item.name][1]">
+                                            <option value="mean">mean</option>
+                                            <option value="median"> median</option>
+                                        </select>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                        <input type="submit" value="Filter">
+                    </form>
+                </div>
+                <div class="box container" style="width: 40%;">
+                    <div class="row">
+                        <div class="col">
+                            <h6><b>Name:</b> {{statsToDisplay.name}}</h6>
+                        </div>
+                        <div class="col">
+                            <h6><b>Type:</b> {{statsToDisplay.type}}</h6>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <h6><b>Missing:</b> {{statsToDisplay.missing}}</h6>
+                        </div>
+                        <div class="col">
+                            <h6><b>Unique:</b> {{statsToDisplay.unique}}</h6>
+                        </div>
+                    </div>
+                    <hr>
+                    <div *ngIf="isInteger">
+                        <div class="row">
+                            <div class="col">
+                                <h6><b>Statistic</b></h6>
+                                <h6>Minimum</h6>
+                                <h6>Maximum</h6>
+                                <h6>Mean</h6>
+                                <h6>StdDev</h6>
+                            </div>
+                            <div class="col">
+                                <h6><b>Value</b></h6>
+                                <h6>{{statsToDisplay.min}}</h6>
+                                <h6>{{statsToDisplay.max}}</h6>
+                                <h6>{{statsToDisplay.mean}}</h6>
+                                <h6>{{statsToDisplay.std}}</h6>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div *ngIf="!isInteger">
+                        <div class="col">
+                            <div class="row"><h6><b>Labels</b></h6></div>
+                            <div class="row" *ngFor="let label of statsToDisplay.labels">
+                                <h6>{{label}}</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</body>
