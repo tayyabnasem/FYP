@@ -50,6 +50,7 @@ export class PreprocessComponent implements OnInit {
     };
     this.uploader.onCompleteItem = (item: any, response: any, status: any, headers: any) => {
       console.log('File Uploaded');
+      console.log(response)
       this.columnsData = JSON.parse(response);
       for (let i = 0; i < this.columnsData.length; i++) {
         this.model[this.columnsData[i].name] = [false, 'mean', 'None']
@@ -85,11 +86,6 @@ export class PreprocessComponent implements OnInit {
     } else {
       this.isInteger = true
     }
-    //console.log(this.statsToDisplay)
-  }
-
-  trackByIndex(index: number, obj: any): any {
-    return index;
   }
 
   onFilterData() {
@@ -101,7 +97,7 @@ export class PreprocessComponent implements OnInit {
       dataToSend = data
       this.sharingService.setData(dataToSend)
       this.router.navigateByUrl('visualize')
-    })
+    }) 
   }
 
   onClick() {

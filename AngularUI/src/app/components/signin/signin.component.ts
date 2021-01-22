@@ -11,13 +11,27 @@ import { SignupServiceService } from 'src/app/services/signup-service.service';
 export class SigninComponent implements OnInit {
 
   model: any
+  flags = {
+    fieldTextType: false
+  }
+
   signinService: SignupServiceService
   constructor(http: HttpClient, private router: Router) { 
-    this.model = {}
+    this.model = {
+      userName: "",
+      password: ""
+    }
     this.signinService = new SignupServiceService(http)
   }
 
   ngOnInit(): void {
+    let signinUrl = "http://localhost:3000/signin"
+    this.signinService.postData(signinUrl, this.model).subscribe((data: any)=>{
+      console.log(data)
+      if (data.text == "Already Logged in"){
+        this.router.navigateByUrl('description')
+      }
+    })
   }
 
   onSubmit(){
@@ -25,9 +39,13 @@ export class SigninComponent implements OnInit {
     let signinUrl = "http://localhost:3000/signin"
     this.signinService.postData(signinUrl, this.model).subscribe((data: any)=>{
       console.log(data)
-      if (data.msg === "Logged in" || data.msg == "Already Logged in"){
+      if (data.text === "Logged in"){
         this.router.navigateByUrl('description')
       }
     })
+  }
+
+  toggleFieldTextType() {
+    this.flags.fieldTextType = !this.flags.fieldTextType
   }
 }

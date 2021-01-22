@@ -6,11 +6,9 @@ const bodyParser = require('body-parser')
 const MongoClient = require('mongodb').MongoClient;
 const dfd = require('danfojs-node')
 const session = require('express-session');
-const { response } = require('express')
 
 var app = express()
 var jsonParser = bodyParser.json()
-var urlencodedParser = bodyParser.urlencoded({ extended: false })
 var url = "mongodb://localhost:27017/";
 var sess
 
@@ -20,7 +18,7 @@ app.use(jsonParser)
 
 const DIR = './uploads';
 
-let storage = multer.diskStorage({
+const storage = multer.diskStorage({
 	destination: (req, file, cb) => {
 		cb(null, DIR);
 	},
@@ -36,10 +34,11 @@ app.post('/api/uploadFile', function (req, res) {
 		if (err) {
 			return res.end("error uploading file");
 		}
-		console.log('File successfully Uploaded');
+
 		let filePath = req.file.path
 		sess.filePath = filePath
 		toSend = []
+
 		dfd.read_csv(filePath)
 			.then(df => {
 				columns = df.column_names
@@ -122,14 +121,6 @@ app.post('/api/filterData', function (req, res) {
 		})
 })
 
-app.get('/plot', function (req, res) {
-	df = dfd.read_csv('uploads/Movie_classification.csv')
-		.then(function (df) {
-			console.log(df.describe().col_data.length)
-			res.send("None")
-		})
-})
-
 app.post('/runScript', function (req, res) {
 	dataToPass = req.body
 	//var dataToPass = { file_name: 'COVID-19 Data.csv', columns_to_select: ['day', 'month', 'year'] }
@@ -144,13 +135,13 @@ app.post('/runScript', function (req, res) {
 		parsedData += data.toString()
 	})
 
-	python.stderr.on('data', function (data){
+	python.stderr.on('data', function (data) {
 		console.log(data.toString())
 	});
 
 	python.stdout.on('end', function () {
 		console.log(parsedData, "END")
-		res.send({imagePath: parsedData})
+		res.send({ imagePath: parsedData })
 	})
 
 	python.on('exit', (code) => {
@@ -158,49 +149,29 @@ app.post('/runScript', function (req, res) {
 	});
 })
 
-app.get('/getPlot', express.static('/'), function(req, res){
-
-})
-
-app.get('/', function (req, res) {
-	let data = {
-		"Name": ["Apples", "Mango", "Banana", "Pear"],
-		"Count": [21, 5, 30, NaN],
-		"Price": [200, 300, 40, 250]
-	}
-
-	df = new dfd.DataFrame(data)
-	console.log(df.isna().sum().data)
-	res.send("Read")
-})
-
-app.get('/projectsList', function (req, res) {
-	MongoClient.connect(url, { useUnifiedTopology: true }, function (err, db) {
-		var database = db.db('FYP')
-		database.collection("Projects").find({}).toArray(function (err, result) {
-			console.log(result)
-			db.close()
-			res.send(result)
-		})
-	});
-});
-
 app.post('/signup', function (req, res) {
 	console.log(req.body)
 	var data = req.body
-	MongoClient.connect(url, { useUnifiedTopology: true }, function (err, db) {
+	MongoClient.connect(url, { useUnifiedTopology: true }, function (err, client) {
 		if (err) {
 			console.log('error')
-			res.send({ error: err })
+			res.send({ text: undefined, error: err })
 		} else {
-			var dbo = db.db("FYP")
-			dbo.collection("Users").insertOne(data, function (err, result) {
-				if (err) {
-					console.log(err)
+			var database = client.db("FYP")
+			database.collection("Users").findOne({userName: data.userName}, function (err, result) {
+				console.log(result)
+				if (!result) {
+					database.collection("Users").insertOne(data, function (err, result) {
+						if (err) {
+							console.log(err)
+						}
+						client.close();
+						res.send({ text: "OK", error: "None" })
+					});
+				} else {
+					res.send({ text: "Username already exists", error: "None" })
 				}
-				db.close();
-				res.send({ text: "OK" })
-			});
+			})
 		}
 	});
 })
@@ -208,52 +179,35 @@ app.post('/signup', function (req, res) {
 app.post('/signin', function (req, res) {
 	sess = req.session
 	if (sess.userName) {
-		console.log(sess.userName)
-		res.send({ msg: "Already Logged in" })
+		res.send({ text: "Already Logged in" , error: "None"})
 	} else {
 		console.log(req.body)
 		var data = req.body
-		MongoClient.connect(url, { useUnifiedTopology: true }, function (err, db) {
+		MongoClient.connect(url, { useUnifiedTopology: true }, function (err, client) {
 			if (err) {
-				console.log('error')
-				res.send({ error: err })
+				res.send({text:"None", error: err })
 			} else {
-				var dbo = db.db("FYP")
-				dbo.collection("Users").find().toArray(function (err, result) {
-					dataToReturnInResponse = { msg: "" }
-					found = false
-					result.forEach(element => {
-						if (element.userName == data.userName) {
-							found = true
-							if (element.password == data.password) {
-								dataToReturnInResponse.msg = "Logged in"
-								sess.userName = data.userName
-							} else
-								dataToReturnInResponse.msg = "Wrong Password"
-						}
-					});
-					db.close()
-					if (!found)
-						dataToReturnInResponse.msg = "User does not exist"
+				var database = client.db("FYP")
+				const query = {userName: data.userName}
+				database.collection("Users").findOne(query, function (err, result) {
+					console.log(result)
+					dataToReturnInResponse = { text: "" , error: "None"}
+					if (result) {
+						if (result.password == data.password) {
+							dataToReturnInResponse.text = "Logged in"
+							sess.userName = data.userName
+							sess.user_database_id = result._id
+						} else
+							dataToReturnInResponse.text = "Wrong Password"
+					} else {
+						dataToReturnInResponse.text = "User does not exist"
+					}
+					client.close()
 					res.send(dataToReturnInResponse)
-				});
+				})
 			}
 		});
 	}
-})
-
-app.get('/signin/:userName', function (req, res) {
-	console.log(req.params)
-	MongoClient.connect(url, { useUnifiedTopology: true }, function (err, db) {
-		if (err) {
-			console.log('error')
-			res.send("error")
-		} else {
-			var dbo = db.db("FYP")
-			dbo.collection("Users").find().toArray(function (err, items) {
-			});
-		}
-	});
 })
 
 app.use(express.static(__dirname));

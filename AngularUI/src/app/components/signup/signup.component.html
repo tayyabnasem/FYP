@@ -1,24 +1,163 @@
-<html>
+<div class="bg-default">
+    <div class="main-content">
+        <!-- Navbar -->
+        <nav class="navbar navbar-top navbar-horizontal navbar-expand-md navbar-dark">
+            <div class="container px-4">
+                <a class="navbar-brand" href="#" target="_blank">
+                    Deep Learning Studio
+                </a>
+            </div>
+        </nav>
+        <!-- Header -->
+        <div class="header bg-primary py-7 py-lg-8">
+            <div class="container">
+                <div class="header-body text-center mb-7">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-5 col-md-6">
+                            <h1 class="text-white">Welcome!</h1>
+                            <p class="text-lead text-light">Use these awesome forms to login or create new account in
+                                your project for free.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="separator separator-bottom separator-skew zindex-100">
+                <svg x="0" y="0" viewBox="0 0 2560 100" preserveAspectRatio="none" version="1.1"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <polygon class="fill-default" points="2560 0 2560 100 0 100"></polygon>
+                </svg>
+            </div>
+        </div>
+        <!-- Page content -->
+        <div class="container mt--8 pb-5">
+            <!-- Table -->
+            <div class="row justify-content-center">
+                <div class="col-lg-6 col-md-8">
+                    <div class="card bg-secondary shadow border-0">
+                        <div class="card-header bg-transparent pb-5">
+                            <div class="text-muted text-center mt-2 mb-4"><small>Sign up with</small></div>
+                            <div class="text-center">
+                                <a href="#" class="btn btn-neutral btn-icon mr-4">
+                                    <span class="btn-inner--icon"><img
+                                            src="https://raw.githack.com/creativetimofficial/argon-dashboard/master/assets/img/icons/common/github.svg"></span>
+                                    <span class="btn-inner--text">Github</span>
+                                </a>
+                                <a href="#" class="btn btn-neutral btn-icon">
+                                    <span class="btn-inner--icon"><img
+                                            src="https://raw.githack.com/creativetimofficial/argon-dashboard/master/assets/img/icons/common/google.svg"></span>
+                                    <span class="btn-inner--text">Google</span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="card-body px-lg-5 py-lg-5">
+                            <div class="text-center text-muted mb-4">
+                                <small>Or sign up with credentials</small>
+                            </div>
+                            <form role="form" #signUpForm="ngForm" (ngSubmit)="onSubmit()">
+                                <div class="form-group">
+                                    <div class="input-group input-group-alternative mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="ni ni-hat-3"></i></span>
+                                        </div>
+                                        <input class="form-control" placeholder="Name" type="text" name="fullName"
+                                            [(ngModel)]="model.fullName" ngModel #fullName="ngModel" required
+                                            minlength="4">
+                                    </div>
+                                </div>
+                                <div *ngIf="fullName.touched">
+                                    <p *ngIf="fullName.errors?.required" class="alert alert-danger small">Name is a
+                                        required field!</p>
+                                    <p *ngIf="fullName.errors?.minlength" class="alert alert-danger small">Name must be
+                                        longer than 3 characters</p>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group input-group-alternative mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="ni ni-email-83"></i></span>
+                                        </div>
+                                        <input class="form-control" placeholder="Email" type="email" name="email"
+                                            [(ngModel)]="model.email" ngModel #email="ngModel"
+                                            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" required>
+                                    </div>
+                                </div>
+                                <div *ngIf="email.touched">
+                                    <p *ngIf="email.errors?.required" class="alert alert-danger small">Email is a
+                                        required field!</p>
+                                    <p *ngIf="email.errors?.pattern" class="alert alert-danger small">This is not a
+                                        valid Email!!!</p>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group input-group-alternative mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                        </div>
+                                        <input class="form-control" placeholder="Username" type="text" name="userName"
+                                            [(ngModel)]="model.userName" ngModel #userName="ngModel" required>
+                                    </div>
+                                </div>
+                                <div *ngIf="userName.touched">
+                                    <p *ngIf="userName.errors?.required" class="alert alert-danger small">Username is a
+                                        required field!</p>
+                                    <p *ngIf="flags.userExists" class="alert alert-danger small">Username already exists</p>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group input-group-alternative">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="ni ni-lock-circle-open"></i></span>
+                                        </div>
+                                        <input class="form-control" name="password" placeholder="Password"
+                                            [type]="flags.fieldTextType ? 'text' : 'password'"
+                                            [(ngModel)]="model.password"
+                                            (change)="checkPasswordStrength(model.password)" ngModel #password="ngModel"
+                                            required minlength="6">
+                                        <div *ngIf="!flags.fieldTextType" class="input-group-append cursor-point" (click)="toggleFieldTextType()">
+                                            <span class="input-group-text">
+                                                <i *ngIf="!flags.fieldTextType" class="fas fa-eye"></i>
+                                            </span>
+                                        </div>
+                                        <div *ngIf="flags.fieldTextType" class="input-group-append cursor-point" (click)="toggleFieldTextType()">
+                                            <span class="input-group-text">
+                                                <i class="fas fa-eye-slash"></i>
+                                            </span>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                                <div *ngIf="password.touched">
+                                    <p *ngIf="password.errors?.required" class="alert alert-danger small">Password is a
+                                        required field!</p>
+                                    <p *ngIf="password.errors?.minlength" class="alert alert-danger small">Password must
+                                        be longer than 6 characters</p>
+                                </div>
+                                <div class="text-muted font-italic"><small>password strength: <span
+                                            class="text-success font-weight-700">{{flags.passStrength}}</span></small>
+                                </div>
+                                <div class="row my-4">
+                                    <div class="col-12">
+                                        <div class="custom-control custom-control-alternative custom-checkbox">
+                                            <input class="custom-control-input" id="customCheckRegister" type="checkbox"
+                                                name="customCheckRegister" [(ngModel)]="flags.policyCheck">
+                                            <label class="custom-control-label" for="customCheckRegister">
+                                                <span class="text-muted">I agree with the <a href="#!">Privacy
+                                                        Policy</a></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
 
-<head>
-    <title>Sign Up</title>
-</head>
-<body>
-    <div class="center">
-        <p class="stext">Sign Up</p>
-        <form #signUpForm="ngForm" (ngSubmit)="onSubmit()">
-            <input class="un" required name="fullName" [(ngModel)]="model.fullName" type="text" placeholder="Full Name" >
-            <!-- <div *ngIf="signUpForm.submitted && fullName.errors" class="text-danger">First name is required</div> -->
-            <input class="un" name="userName" ngModel type="text" [(ngModel)]="model.userName" placeholder="Username">
-            <input class="un" name="email" ngModel type="email" [(ngModel)]="model.email" placeholder="Email">
-            <input class="un" name="password" ngModel type="password" [(ngModel)]="model.password" placeholder="Password">
-            <input class="un" name="confPassword" ngModel type="password" [(ngModel)]="model.confPassword" placeholder="Confirm Password" ><br>
-            <input type="checkbox">
-            <label style="margin-left: 10px; color: rgb(38, 50, 56)">Agree to Terms & conditions</label>
-            <br>
-            <button type="submit" class="sbtn">Sign up</button>
-        </form>
+                                <div class="text-center">
+                                    <button type="submit" class="btn btn-primary mt-4"
+                                        [disabled]="email.errors || password.errors || fullName.errors || userName.errors || !flags.policyCheck" 
+                                    >
+                                        Create account
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-</body>
 
-</html>
+</div>

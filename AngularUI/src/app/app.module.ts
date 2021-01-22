@@ -4,17 +4,16 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { FileUploadModule } from 'ng2-file-upload';
-import { ChartsModule } from 'ng2-charts';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SigninComponent } from './components/signin/signin.component';
 import { SignupComponent } from './components/signup/signup.component';
 import { PreprocessComponent } from './components/preprocess/preprocess.component';
-import { ChartsComponent } from './charts/charts.component';
+import { ChartsComponent } from './components/charts/charts.component';
 import { ShareDataService } from './services/share-data.service';
 import { DescriptionComponent } from './components/description/description.component';
-
+import { HomeComponent } from './components/home/home.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +22,8 @@ import { DescriptionComponent } from './components/description/description.compo
     SignupComponent,
     PreprocessComponent,
     ChartsComponent,
-    DescriptionComponent
+    DescriptionComponent,
+    HomeComponent,
   ],
   imports: [
     BrowserModule,
@@ -31,7 +31,6 @@ import { DescriptionComponent } from './components/description/description.compo
     FormsModule,
     HttpClientModule, 
     FileUploadModule,
-    ChartsModule,
     RouterModule,
   ],
   providers: [ShareDataService],
