@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { FileUploadModule, FileUploader, FileItem } from 'ng2-file-upload';
 import { ShareDataService } from 'src/app/services/share-data.service';
@@ -12,8 +12,12 @@ import { SignupServiceService } from 'src/app/services/signup-service.service';
   exportAs: "columnSelectForm"
 })
 export class PreprocessComponent implements OnInit {
+
+  @Output()
+  showVisualization = new EventEmitter()
+
   public uploader: FileUploader = new FileUploader({
-    url: 'http://localhost:3000/api/uploadFile',
+    url: 'http://localhost:3000/uploadFile',
     itemAlias: 'file',
   });
   signupService: SignupServiceService
@@ -21,6 +25,7 @@ export class PreprocessComponent implements OnInit {
   columnsData: any
   model: any
   progress: number = 0;
+  selected_column: number = 0
   statsToDisplay: any
   isInteger: boolean = false
   private router: Router
@@ -48,12 +53,16 @@ export class PreprocessComponent implements OnInit {
     this.uploader.onAfterAddingFile = (file) => {
       file.withCredentials = true;
     };
+
     this.uploader.onCompleteItem = (item: any, response: any, status: any, headers: any) => {
       console.log('File Uploaded');
-      console.log(response)
+      console.log(JSON.parse(response))
       this.columnsData = JSON.parse(response);
       for (let i = 0; i < this.columnsData.length; i++) {
-        this.model[this.columnsData[i].name] = [false, 'mean', 'None']
+        this.model[this.columnsData[i].name] = [false, 'mean', 'None', {
+          replacevalue: "",
+          replacewith: ""
+        }]
       };
       this.uploader.queue.pop()
     };
@@ -81,7 +90,8 @@ export class PreprocessComponent implements OnInit {
       max: this.columnsData[index].max,
       labels: this.columnsData[index].labels
     }
-    if (this.statsToDisplay.type === "string") {
+    this.selected_column = index
+    if (this.statsToDisplay.type === "String") {
       this.isInteger = false
     } else {
       this.isInteger = true
@@ -89,14 +99,18 @@ export class PreprocessComponent implements OnInit {
   }
 
   onFilterData() {
-    let filterDataUrl = "http://localhost:3000/api/filterData"
-    console.log("Model", this.model)
-    let dataToSend = {}
+    let filterDataUrl = "http://localhost:3000/filterData"
+    let dataToSend: Array<any> = []
+
     this.signupService.postData(filterDataUrl, this.model).subscribe((data) => {
       console.log("Data", data)
-      dataToSend = data
+      this.showVisualization.emit()
+      for (let i = 0; i < this.columnsData.length; i++) {
+        if (this.model[this.columnsData[i].name][0])
+          dataToSend.push(this.columnsData[i].name)
+      };
+      console.log(dataToSend)
       this.sharingService.setData(dataToSend)
-      this.router.navigateByUrl('visualize')
     }) 
   }
 

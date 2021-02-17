@@ -1,6 +1,96 @@
-<div class="bg-default">
+<div class="authentication">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4 col-sm-12">
+                <form class="card auth_form" role="form" #signinForm="ngForm" (ngSubmit)="onSubmit()">
+                    <div class="header">
+                        <img class="logo" src="assets/images/logo.svg" alt="" />
+                        <h5>Sign Up</h5>
+                        <span>Register a new membership</span>
+                    </div>
+                    <div class="body">
+                        <div class="input-group mb-3">
+                            <input class="form-control" placeholder="Name" type="text" name="fullName"
+                                [(ngModel)]="model.fullName" ngModel #fullName="ngModel" required minlength="4">
+                            <div class="input-group-append">
+                                <span class="input-group-text">
+                                    <i class="fas fa-user"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <div *ngIf="fullName.touched">
+                            <p *ngIf="fullName.errors?.required" class="alert alert-danger">Name is a
+                                required field!</p>
+                            <p *ngIf="fullName.errors?.minlength" class="alert alert-danger">Name must be
+                                longer than 3 characters</p>
+                        </div>
+
+                        <div class="input-group mb-3">
+                            <input class="form-control" placeholder="Email" type="email" name="email"
+                                [(ngModel)]="model.email" ngModel #email="ngModel"
+                                pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" required>
+                            <div class="input-group-append">
+                                <span class="input-group-text">
+                                    <i class="fas fa-envelope"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <div *ngIf="email.touched">
+                            <p *ngIf="email.errors?.required" class="alert alert-danger small">Email is a
+                                required field!</p>
+                            <p *ngIf="email.errors?.pattern" class="alert alert-danger small">This is not a
+                                valid Email!!!</p>
+                            <p *ngIf="flags.userExists" class="alert alert-danger small">User already exists</p>
+                        </div>
+                        <div class="input-group mb-3">
+                            <input class="form-control" name="password" placeholder="Password"
+                                [type]="flags.fieldTextType ? 'text' : 'password'" [(ngModel)]="model.password" ngModel
+                                #password="ngModel" required>
+                            <div *ngIf="!flags.fieldTextType" class="input-group-append cursor-point"
+                                (click)="toggleFieldTextType()">
+                                <span class="input-group-text">
+                                    <i *ngIf="!flags.fieldTextType" class="fas fa-eye"></i>
+                                </span>
+                            </div>
+                            <div *ngIf="flags.fieldTextType" class="input-group-append cursor-point"
+                                (click)="toggleFieldTextType()">
+                                <span class="input-group-text">
+                                    <i class="fas fa-eye-slash"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <div *ngIf="password.touched">
+                            <p *ngIf="password.errors?.required" class="alert alert-danger small">Password is a
+                                required field!</p>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary my-4"
+                                [disabled]="password.errors || email.errors">Sign up</button>
+                        </div>
+                    </div>
+                    <div class="signin_with mt-3">
+                        <a routerLink="" routerLinkActive="active">You already have a membership?</a>
+                    </div>
+                </form>
+                <div class="copyright text-center">
+                    &copy;
+                    <span>, All Rights Reserved</span>
+                </div>
+            </div>
+            <div class="col-lg-8 col-sm-12">
+                <div class="card">
+                    <img src="assets/images/signup.svg" alt="Sign Up" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- <div class="bg-default">
     <div class="main-content">
-        <!-- Navbar -->
+        <!-- Navbar 
         <nav class="navbar navbar-top navbar-horizontal navbar-expand-md navbar-dark">
             <div class="container px-4">
                 <a class="navbar-brand" href="#" target="_blank">
@@ -8,19 +98,8 @@
                 </a>
             </div>
         </nav>
-        <!-- Header -->
-        <div class="header bg-primary py-7 py-lg-8">
-            <div class="container">
-                <div class="header-body text-center mb-7">
-                    <div class="row justify-content-center">
-                        <div class="col-lg-5 col-md-6">
-                            <h1 class="text-white">Welcome!</h1>
-                            <p class="text-lead text-light">Use these awesome forms to login or create new account in
-                                your project for free.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <!-- Header 
+        <div class="header bg-gradient-primary py-7 py-lg-8">
             <div class="separator separator-bottom separator-skew zindex-100">
                 <svg x="0" y="0" viewBox="0 0 2560 100" preserveAspectRatio="none" version="1.1"
                     xmlns="http://www.w3.org/2000/svg">
@@ -28,25 +107,25 @@
                 </svg>
             </div>
         </div>
-        <!-- Page content -->
+        <!-- Page content
         <div class="container mt--8 pb-5">
-            <!-- Table -->
+            <!-- Table 
             <div class="row justify-content-center">
                 <div class="col-lg-6 col-md-8">
                     <div class="card bg-secondary shadow border-0">
-                        <div class="card-header bg-transparent pb-5">
+                        <div class="card-header bg-transparent pb-3">
                             <div class="text-muted text-center mt-2 mb-4"><small>Sign up with</small></div>
                             <div class="text-center">
-                                <a href="#" class="btn btn-neutral btn-icon mr-4">
+                                <!-- <a href="#" class="btn btn-neutral btn-icon mr-4">
                                     <span class="btn-inner--icon"><img
                                             src="https://raw.githack.com/creativetimofficial/argon-dashboard/master/assets/img/icons/common/github.svg"></span>
                                     <span class="btn-inner--text">Github</span>
-                                </a>
-                                <a href="#" class="btn btn-neutral btn-icon">
+                                </a> 
+                                <div class="btn btn-neutral btn-icon" (click)="signInWithGoogle()">
                                     <span class="btn-inner--icon"><img
                                             src="https://raw.githack.com/creativetimofficial/argon-dashboard/master/assets/img/icons/common/google.svg"></span>
                                     <span class="btn-inner--text">Google</span>
-                                </a>
+                                </div>
                             </div>
                         </div>
                         <div class="card-body px-lg-5 py-lg-5">
@@ -132,22 +211,9 @@
                                 <div class="text-muted font-italic"><small>password strength: <span
                                             class="text-success font-weight-700">{{flags.passStrength}}</span></small>
                                 </div>
-                                <div class="row my-4">
-                                    <div class="col-12">
-                                        <div class="custom-control custom-control-alternative custom-checkbox">
-                                            <input class="custom-control-input" id="customCheckRegister" type="checkbox"
-                                                name="customCheckRegister" [(ngModel)]="flags.policyCheck">
-                                            <label class="custom-control-label" for="customCheckRegister">
-                                                <span class="text-muted">I agree with the <a href="#!">Privacy
-                                                        Policy</a></span>
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-
                                 <div class="text-center">
                                     <button type="submit" class="btn btn-primary mt-4"
-                                        [disabled]="email.errors || password.errors || fullName.errors || userName.errors || !flags.policyCheck" 
+                                        [disabled]="email.errors || password.errors || fullName.errors || userName.errors" 
                                     >
                                         Create account
                                     </button>
@@ -160,4 +226,4 @@
         </div>
     </div>
 
-</div>
+</div> -->

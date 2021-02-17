@@ -1,0 +1,50 @@
+<div class="theme-blush">
+    <section class="content">
+        <div class="body_scroll">
+            <div class="block-header">
+                <div class="row">
+                    <div class="col-lg-7 col-md-6 col-sm-12">
+                        <h2>Project list</h2>
+                    </div>
+                    <div class="col-lg-5 col-md-6 col-sm-12">
+                        <button class="btn btn-primary btn-icon float-right right_icon_toggle_btn" type="button" title="Create new project">
+                            <i class="zmdi zmdi-arrow-right"></i>
+                        </button>
+                        <button class="btn btn-success btn-icon float-right" type="button" (click)="createNewProject()">
+                            <i class="zmdi zmdi-plus"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row clearfix">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <div class="card project_list">
+                            <div class="table-responsive">
+                                <table class="table table-hover c_table theme-color">
+                                    <thead>
+                                        <tr>
+                                            <th>Sr. No.</th>
+                                            <th>Project Name</th>
+                                            <th>Domain</th>
+                                            <th>Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr style="cursor: pointer" *ngFor="let project of projects; let i = index;">
+                                            <td><strong>{{i+1}}</strong></td>
+                                            <td><strong class="single-user-name">{{project.name}}</strong></td>
+                                            <td><span class="badge badge-info">{{project.domain}}</span></td>
+                                            <td>{{project.date}}</td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

@@ -14,7 +14,7 @@ export class ChartsComponent implements OnInit {
   model: any = {
     x: '',
     y: '',
-    data: ''
+    plottype:'scatter'
   }
   image: any = undefined
 
@@ -23,18 +23,14 @@ export class ChartsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    let data = this.sharingService.getData()
-    this.model.data = data
-    for (let key of Object.keys(data)) {
-      this.columns.push(key)
-    }
+    this.columns = this.sharingService.getData()
   }
 
   createPlot() {
     if (this.image) {
       this.image = undefined
     }
-    let URL = 'http://localhost:3000/runScript'
+    let URL = 'http://localhost:3000/plotData'
     this.serverservice.postData(URL, this.model).subscribe((data) => {
       console.log(data)
       this.image = 'http://localhost:3000/' + data.imagePath

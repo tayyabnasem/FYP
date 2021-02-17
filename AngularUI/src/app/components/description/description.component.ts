@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -7,47 +7,47 @@ import { Router } from '@angular/router';
   styleUrls: ['./description.component.css']
 })
 export class DescriptionComponent implements OnInit {
+
+  @Output()
+  showPreprocess = new EventEmitter();
+
   isOpen: boolean
   model: any
   isValid: boolean
-  selectedRadio: any
-  selectedRadioML: any
-  selectedRadioDL: any
   isVisible: boolean
+  domainML: boolean
   name: any
+
+  deeplearningicon: any = 'deep-learning'
+  machinelearningicon: any = 'machine-learning-active'
+
   constructor(private router: Router) {
     this.isOpen = false;
     this.model = { name: 'Deep Learning Studio', description: 'NN models' }
     this.isValid = false;
     this.isVisible = false;
+    this.domainML = true;
   }
 
   ngOnInit(): void {
   }
 
-  onRadioClick() {
-    if (this.selectedRadio == "ML") {
-      this.isValid = true
-    } else {
-      this.isValid = false
-    }
-    this.isVisible = true
-  }
   onClickML() {
-
+    this.domainML = true
+    this.machinelearningicon = 'machine-learning-active'
+    this.deeplearningicon = 'deep-learning'
   }
   onClickDL() {
-
+    this.domainML = false
+    this.deeplearningicon = 'deep-learning-active'
+    this.machinelearningicon = 'machine-learning'
   }
   next(){
-    this.router.navigateByUrl('preprocess')
+    this.showPreprocess.emit()
   }
 
   onClick() {
     console.log(this.isOpen)
     this.isOpen = !this.isOpen
-  }
-  onSubmit() {
-
   }
 }

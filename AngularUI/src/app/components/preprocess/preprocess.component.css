@@ -4,8 +4,11 @@
 
 @import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
 body {
-    font-family: 'Poppins', sans-serif;
-    background: #fafafa;
+    font-family: Comfortaa;
+    
+}
+.content{
+    padding: 20px;
 }
 
 p {
@@ -13,9 +16,14 @@ p {
     font-size: 1.1em;
     font-weight: 300;
     line-height: 1.7em;
-    color: #999;
+    /* color: #999; */
 }
-
+/* .fix{
+    
+       right: 0;
+       position: fixed;
+      
+} */
 a,
 a:hover,
 a:focus {
@@ -360,16 +368,43 @@ a.article:hover {
 
 
 
+/* .modal{
+    max-width: 80% !important;
+} */
+.drop{
+    color: #202124;
+    font-size: 13px;
+    font-weight: 500;
+    background: transparent;
+    border-radius: 0;
+    border: 1px solid transparent;
+    box-shadow: inset 0 -1px 0 0 rgb(0 0 0 / 12%);
+    box-sizing: border-box;
+    display: inline-block;
+    overflow: hidden;
+    padding: 0 12px 2px;
+    vertical-align: middle;
+    min-width: 256px;
+}
 
+.font-16{
+    font-size: 16px;
+}
 
+.border-r{
+    border-right: 1px solid;
+}
+
+.mfont{
+    font-size: 12px;
+}
 .sfile {
     cursor: pointer;
-    background-color: #2196F3;
-    color: white;
+
     margin-right: 570px;
     padding: 10px;
     border: 1px white;
-    border-radius: 20px;
+ 
     /* Style as you please, it will become the visible UI component. */
  }
  
@@ -412,4 +447,29 @@ a.article:hover {
     margin-left: 60px;
 }
 
+.dropzone{
+    width: 450px;
+    height: 200px;
+    padding: 2rem;
+    text-align: center;
+    border: dashed 1px ;
+    position: relative;
+    margin: 0 auto;
+    background: padding-box;
+}
+
+h3{
+    font-size: 20px;
+    font-weight: 600;
+
+}
+
+.bg-red{
+    color: white;
+    width: 183px;
+    height: 44px;
+    border-radius: 21px;
+    padding: 8px 16px;
+    cursor: pointer;
+}
  

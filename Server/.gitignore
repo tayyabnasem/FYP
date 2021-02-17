@@ -1,3 +1,5 @@
 # Directories to Ignore
 node_modules/
 uploads/
+venv/
+.idea/

@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { SocialAuthService, GoogleLoginProvider } from 'angularx-social-login';
 import { SignupServiceService } from 'src/app/services/signup-service.service';
 
 @Component({
@@ -18,24 +19,48 @@ export class SignupComponent implements OnInit {
     userName: '',
     email: '',
     password: '',
+    provider: 'DLS'
   };
   flags: any = {
     passStrength: 'Short',
-    policyCheck: true,
     fieldTextType: false,
     userExists: false
   }
 
-  constructor(http: HttpClient, private router: Router) {
+  constructor(http: HttpClient, private router: Router, private authService: SocialAuthService) {
     this.signUpService = new SignupServiceService(http);
   }
 
   ngOnInit(): void {
+    let signupUrl = "http://localhost:3000/signup"
+    let signinWithGoogleUrl = "http://localhost:3000/signinWithGoogle"
+
+    this.authService.authState.subscribe((user) => {
+      console.log(user)
+      let dataToSend = {
+        email: user.email,
+        fullName: user.name,
+        provider: 'Google'
+      }
+
+      this.signUpService.postData(signupUrl, dataToSend).subscribe((response) => {
+        console.log(response)
+        if (response.text === "Username already exists") {
+          this, this.signUpService.postData(signinWithGoogleUrl, dataToSend).subscribe((response) => {
+            console.log(response)
+            if (response.text === "Logged in") {
+              this.router.navigate(["description"], {replaceUrl:true, skipLocationChange: true});
+            }
+          })
+        } else if (response.text === "OK") {
+          this.router.navigate(["description"], {replaceUrl:true, skipLocationChange: true});
+          //this.router.navigateByUrl('description', { skipLocationChange: true })
+        }
+      })
+    })
   }
 
   onSubmit() {
-    console.log(this.model)
-    console.log(this.flags)
     let signupUrl = "http://localhost:3000/signup"
     this.signUpService.postData(signupUrl, this.model).subscribe((data) => {
       console.log(data)
@@ -45,6 +70,10 @@ export class SignupComponent implements OnInit {
         this.router.navigateByUrl('signin')
       }
     });
+  }
+
+  signInWithGoogle(): void {
+    this.authService.signIn(GoogleLoginProvider.PROVIDER_ID);
   }
 
   toggleFieldTextType() {
