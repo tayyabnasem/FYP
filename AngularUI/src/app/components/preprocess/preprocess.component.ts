@@ -91,6 +91,7 @@ export class PreprocessComponent implements OnInit {
       labels: this.columnsData[index].labels
     }
     this.selected_column = index
+    console.log(this.selected_column)
     if (this.statsToDisplay.type === "String") {
       this.isInteger = false
     } else {
@@ -116,6 +117,10 @@ export class PreprocessComponent implements OnInit {
 
   onClick() {
     this.isOpen = !this.isOpen
+  }
+
+  logModel(){
+    console.log(this.model)
   }
 
 }

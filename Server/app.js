@@ -12,6 +12,7 @@ const getprojectsroute = require('./Routes/getprojects')
 const filterdataroute = require('./Routes/filterdata')
 const plotroute = require('./Routes/plottingroute')
 const signoutroute = require('./Routes/signoutroute')
+const generatemodelroute = require('./Routes/generatemodelroute')
 
 var jsonParser = bodyParser.json()
 
@@ -27,6 +28,7 @@ app.use('/getProjects', getprojectsroute)
 app.use('/filterData', filterdataroute)
 app.use('/plotData', plotroute)
 app.use('/signout', signoutroute)
+app.use('/generatemodel', generatemodelroute)
 
 app.use(express.static(__dirname));
 

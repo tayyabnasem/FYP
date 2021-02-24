@@ -1,6 +1,12 @@
 body {
     font-family: Comfortaa;
 }
+.active{
+    color: #1967ff;
+    background: white;
+    
+    /* background-color: #e8f0fe; */
+}
 
 .drop {
     color: #202124;
@@ -64,6 +70,6 @@ body {
     margin: 5px;
 }
 
-.active {
+/* .active {
     color: #4285f4;
-}
+} */

@@ -19,6 +19,11 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ProjectlistComponent } from './components/projectlist/projectlist.component';
 import { ApicallService } from './services/apicall.service';
 import { ProfileComponent } from './profile/profile.component';
+import { ModelComponent } from './components/model/model.component';
+import { SortableModule } from '@progress/kendo-angular-sortable';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+
 
 @NgModule({
     declarations: [
@@ -32,6 +37,7 @@ import { ProfileComponent } from './profile/profile.component';
         DashboardComponent,
         ProjectlistComponent,
         ProfileComponent,
+        ModelComponent,
     ],
     imports: [
         BrowserModule,
@@ -40,7 +46,9 @@ import { ProfileComponent } from './profile/profile.component';
         HttpClientModule,
         FileUploadModule,
         RouterModule,
-        SocialLoginModule
+        SocialLoginModule,
+        SortableModule,
+        BrowserAnimationsModule
     ],
     providers: [
         ShareDataService,

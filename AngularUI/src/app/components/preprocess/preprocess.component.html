@@ -98,7 +98,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body mfont">
+            <div class="modal-body">
                 <div class="row">
                     <div class="col border-r">
                         <div class="row">
@@ -106,22 +106,20 @@
                         </div>
                         <div class="row">
                             <div class="col">
-                                <p><b>Name:</b> {{statsToDisplay.name}}
-                                </p>
+                                <b>Name </b>: {{statsToDisplay.name}}
+
                             </div>
                             <div class="col">
-                                <p><b>Type:</b> {{statsToDisplay.type}}
-                                </p>
+                                <b>Type </b>: {{statsToDisplay.type}}
+
                             </div>
                         </div>
                         <div class="row">
                             <div class="col">
-                                <p><b>Missing:</b>
-                                    {{statsToDisplay.missing}}</p>
+                                <b>Missing </b>: {{statsToDisplay.missing}}
                             </div>
                             <div class="col">
-                                <p><b>Unique:</b>
-                                    {{statsToDisplay.unique}}</p>
+                                <b>Unique </b>: {{statsToDisplay.unique}}
                             </div>
                         </div>
                         <hr>
@@ -160,24 +158,27 @@
                         <div class="row">
                             <div class="col font-16"><b>Preprocessing options</b></div>
                         </div>
-                        <div class="row">
-                            <label class="col" for="impute">Impute
-                                With:</label>
-                            <select class="col drop" id="impute" name="impute">
-                                <option value="mean">Mean</option>
-                                <option value="median">Median</option>
-                            </select>
-                        </div>
-                        <br>
                         <form>
+                            <div class="row">
+                                <label class="col" for="impute">Impute
+                                    With:</label>
+                                <select class=" col form-control show-tick ms" id="impute" name="impute"
+                                    [(ngModel)]="model[this.columnsData[selected_column].name][1]">
+                                    <option value="mean">Mean</option>
+                                    <option value="median">Median</option>
+                                </select>
+                            </div>
+                            <br>
                             <div class="row">
                                 <div class="col">
                                     <label for="">Replace this value</label>
-                                    <input type="text">
+                                    <input class="form-control" type="text" name="replacevalue"
+                                        [(ngModel)]="model[this.columnsData[selected_column].name][3].replacevalue">
                                 </div>
                                 <div class="col">
                                     <label for="">Replace with</label>
-                                    <input class="borderless-input" type="text">
+                                    <input class="form-control" type="text" name="replacewith"
+                                        [(ngModel)]="model[this.columnsData[selected_column].name][3].replacewith">
                                 </div>
                             </div>
                         </form>
@@ -186,8 +187,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save
-                    changes</button>
+                <button type="button" class="btn btn-primary" (click)="logModel()">Save changes</button>
             </div>
         </div>
     </div>

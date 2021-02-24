@@ -1,0 +1,176 @@
+<section class="content">
+    <div class="body_scroll">
+        <div class="block-header">
+            <div class="row">
+                <div class="col-lg-7 col-md-6 col-sm-12">
+                    <h2>Model</h2>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid">
+            <!-- Draggable Handles -->
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2><strong>LAYERS</strong></h2>
+                        </div>
+                        <div class="body">
+                            <div class="col text-center" *ngIf="layerModel.length == 0">
+                                No Layers
+                            </div>
+                            <div class="dd nestable-with-handle" *ngIf="layerModel.length != 0">
+                                <kendo-sortable [kendoSortableBinding]="layerModel">
+                                    <ng-template let-item="item">
+                                        <ol class="dd-list">
+                                            <li class="dd-item dd3-item">
+                                                <div class="dd-handle dd3-handle"></div>
+                                                <div class="dd3-content cursor-p" data-toggle="modal"
+                                                    (click)="selectLayer(item)" data-target="#exampleModalLong">
+                                                    {{ item.layerName }}
+                                                </div>
+                                            </li>
+                                        </ol>
+                                    </ng-template>
+                                </kendo-sortable>
+                            </div>
+                            <div class="col text-center">
+                                <button class="btn btn-primary" data-toggle="modal"
+                                    data-target="#newModalLong">New Layer</button>
+                                <button class="btn btn-success" [disabled]="layerModel.length == 0" (click)="generateModel()">Generate Model</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">{{selectedLayerData.layerName}}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="row">
+                        <div class="col">
+                            <label for="">Units</label>
+                            <div class="input-group spinner">
+                                <input type="number" class="form-control text-center" name="units"
+                                    [(ngModel)]="selectedLayerData.units">
+                                <div class="input-group-append">
+                                    <div class="input-group-text cursor-p" (click)="onSpinUpUpdate()"><i
+                                            class="zmdi zmdi-chevron-up"></i></div>
+                                    <div class="input-group-text cursor-p" (click)="onSpinDownUpdate()"><i
+                                            class="zmdi zmdi-chevron-down"></i></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col">
+                            <label for="">Activation Function</label>
+                            <div class="clearfix">
+                                <select class="form-control show-tick ms" style="padding: 9px;"
+                                    name="activationFunction" [(ngModel)]="selectedLayerData.activationFunction">
+                                    <option>None</option>
+                                    <option>Relu</option>
+                                    <option>Sigmoid</option>
+                                    <option>Softmax</option>
+                                    <option>Softplus</option>
+                                    <option>Softsign</option>
+                                    <option>Tanh</option>
+                                    <option>Selu</option>
+                                    <option>Elu</option>
+                                    <option>Exponential</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal"
+                    (click)="updateLayerData()">Update</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="newModalLong" tabindex="-1" role="dialog" aria-labelledby="newModalLongTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="newModalLongTitle">New Layer</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="row" style="padding-bottom: 10px;">
+                        <div class="col">
+                            <label for="">Layer Name</label>
+                            <div class="clearfix">
+                                <select class="form-control show-tick ms" style="padding: 9px;" name="layerName"
+                                    [(ngModel)]="newLayerData.layerName">
+                                    <option>Dense</option>
+                                    <option>Convolution2D</option>
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label for="">Units</label>
+                            <div class="input-group spinner">
+                                <input type="number" class="form-control text-center" name="units"
+                                    [(ngModel)]="newLayerData.units">
+                                <div class="input-group-append">
+                                    <!-- <span class="input-group-text col" style="display: grid;"> -->
+                                    <div class="input-group-text cursor-p" (click)="onSpinUp()"><i
+                                            class="zmdi zmdi-chevron-up"></i></div>
+                                    <div class="input-group-text cursor-p" (click)="onSpinDown()"><i
+                                            class="zmdi zmdi-chevron-down"></i></div>
+                                    <!-- </span> -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col">
+                            <label for="">Activation Function</label>
+                            <div class="clearfix">
+                                <select class="form-control show-tick ms" style="padding: 9px;"
+                                    name="activationFunction" [(ngModel)]="newLayerData.activationFunction">
+                                    <option>default</option>
+                                    <option>relu</option>
+                                    <option>sigmoid</option>
+                                    <option>softmax</option>
+                                    <option>softplus</option>
+                                    <option>softsign</option>
+                                    <option>tanh</option>
+                                    <option>selu</option>
+                                    <option>elu</option>
+                                    <option>exponential</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button class="btn btn-primary" (click)="addLayer()" data-dismiss="modal">Add</button>
+            </div>
+        </div>
+    </div>
+</div>
