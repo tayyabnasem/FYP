@@ -35,9 +35,92 @@
                                 </kendo-sortable>
                             </div>
                             <div class="col text-center">
-                                <button class="btn btn-primary" data-toggle="modal"
-                                    data-target="#newModalLong">New Layer</button>
-                                <button class="btn btn-success" [disabled]="layerModel.length == 0" (click)="generateModel()">Generate Model</button>
+                                <button class="btn btn-primary" data-toggle="modal" data-target="#newModalLong">New
+                                    Layer</button>
+                                <button class="btn btn-success" [disabled]="layerModel.length == 0"
+                                    (click)="generateModel()">Generate Model</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="header">
+                            <h2><strong>TRAINING</strong></h2>
+                        </div>
+                        <div class="body">
+                            <div class="row">
+                                <div class="col">
+                                    <label for="epoch">Epoch</label>
+                                    <i style="cursor: pointer;" data-toggle="modal" data-target="#epoch"
+                                        class=" quest fa fa-question-circle" aria-hidden="true"></i>
+                                    <div class="input-group spinner">
+                                        <input type="number" class="form-control text-center" name="epoch"
+                                            [(ngModel)]="trainingData.epoch">
+                                        <div class="input-group-append">
+                                            <div class="input-group-text cursor-p" (click)="onEpochUp()"><i
+                                                    class="zmdi zmdi-chevron-up"></i></div>
+                                            <div class="input-group-text cursor-p" (click)="onEpochDown()"><i
+                                                    class="zmdi zmdi-chevron-down"></i></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <label for="learningRate">Learning Rate</label>
+                                    <i style="cursor: pointer;" data-toggle="modal" data-target="#learningRate"
+                                        class=" quest fa fa-question-circle" aria-hidden="true"></i>
+                                    <div class="input-group spinner">
+                                        <input type="number" class="form-control text-center" name="Learningrate"
+                                            [(ngModel)]="trainingData.learningRate">
+                                        <div class="input-group-append">
+                                            <div class="input-group-text cursor-p" (click)="onEpochUp()"><i
+                                                    class="zmdi zmdi-chevron-up"></i></div>
+                                            <div class="input-group-text cursor-p" (click)="onEpochDown()"><i
+                                                    class="zmdi zmdi-chevron-down"></i></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col">
+                                    <label for="batchSize">Batch Size</label>
+                                    <i style="cursor: pointer;" data-toggle="modal" data-target="#batchSize"
+                                        class=" quest fa fa-question-circle" aria-hidden="true"></i>
+                                    <div class="input-group spinner">
+                                        <select class="form-control show-tick ms" style="padding: 9px;" name="batchSize"
+                                            [(ngModel)]="trainingData.batchSize">
+                                            <option>16</option>
+                                            <option>32</option>
+                                            <option>64</option>
+                                            <option>128</option>
+                                            <option>256</option>
+                                            <option>512</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <label for="lossFunction">Loss Function</label>
+                                    <i style="cursor: pointer;" data-toggle="modal" data-target="#lossFunction"
+                                        class=" quest fa fa-question-circle" aria-hidden="true"></i>
+                                    <div class="input-group spinner">
+                                        <select class="form-control show-tick ms" style="padding: 9px;" name="batchSize"
+                                            [(ngModel)]="trainingData.lossFunction">
+                                            <option>Mean Absolute Error</option>
+                                            <option>Mean Absolute Percentage Error</option>
+                                            <option>Mean Squared Error</option>
+                                            <option>Mean Squared Logarithmic Error</option>
+                                            <option>Categorical Hinge Loss</option>
+                                            <option>Huber loss value</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col">
+                                    <p><b>Split the Dataset</b></p>
+
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -170,6 +253,75 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                 <button class="btn btn-primary" (click)="addLayer()" data-dismiss="modal">Add</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="epoch" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="title" id="defaultModalLabel">Epoch</h4>
+            </div>
+            <div class="tsize modal-body"> One epoch means that each and every sample in the training dataset has been
+                fed through the training model at least once. If your epochs are set to 50, for example, it means that
+                the model you are training will work through the entire training dataset 50 times. Generally the larger
+                the number, the better your model will learn to predict the data.
+                <br> You probably want to tweak (usually increase) this number until you get good predictive results
+                with your model.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary waves-effect" data-dismiss="modal">CLOSE</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="learningRate" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="title" id="defaultModalLabel">Learning Rate</h4>
+            </div>
+            <div class="tsize modal-body">Be careful tweaking this number!
+                <br>Even small changes can have huge effect on how well the model learns.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary waves-effect" data-dismiss="modal">CLOSE</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="batchSize" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="title" id="defaultModalLabel">Batch Size</h4>
+            </div>
+            <div class="tsize modal-body">A batch is a set of samples used in one iteration of training. For example,
+                let's say that you have 80 images and you choose a batch size of 16. This means the data will be split
+                into 80 / 16 = 5 batches. Once all 5 batches have been fed through the model, exactly one epoch will be
+                complete. </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary waves-effect" data-dismiss="modal">CLOSE</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="lossFunction" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="title" id="defaultModalLabel">Loss Function</h4>
+            </div>
+            <div class="tsize modal-body"> At its core, a loss function is incredibly simple: it's a method of
+                evaluating how well your algorithm models your dataset. If your predictions are totally off, your loss
+                function will output a higher number. If they're pretty good, it'll output a lower number. </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary waves-effect" data-dismiss="modal">CLOSE</button>
             </div>
         </div>
     </div>

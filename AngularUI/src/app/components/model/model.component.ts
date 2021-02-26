@@ -11,13 +11,19 @@ export class ModelComponent implements OnInit {
 	newLayerData: any = {
 		layerName: "Dense",
 		units: 1,
-		activationFunction: "None"
+		activationFunction: "default"
 	}
 	selectedLayerData: any = {
 		layerName: "",
 		units: 1,
 		activationFunction: "",
 	}
+  trainingData: any = {
+    epoch:1,
+    learningRate:0.01,
+    lossFunction: "",
+    batchSize: 16
+  }
 	selectedLayerIndex: number = 0
 	layerModel: any[] = []
 
@@ -33,6 +39,10 @@ export class ModelComponent implements OnInit {
 	onSpinUpUpdate() { this.selectedLayerData.units += 1; }
 
 	onSpinDownUpdate() { if (this.selectedLayerData.units > 1) this.selectedLayerData.units -= 1; }
+
+  onEpochUp() { this.trainingData.epoch += 1; }
+
+	onEpochDown() { if (this.trainingData.epoch > 1) this.trainingData.epoch -= 1; }
 
 	addLayer() {
 		this.layerModel = [...this.layerModel, this.newLayerData]
@@ -58,10 +68,10 @@ export class ModelComponent implements OnInit {
 	}
 
 	generateModel() {
-		let url = "http://localhost:3000/generatemodel"
-		this.apiCall.postData(url, this.layerModel).subscribe((response)=>{
-			console.log(response)
-		})
+		// let url = "http://localhost:3000/generatemodel"
+		// this.apiCall.postData(url, this.layerModel).subscribe((response)=>{
+		// 	console.log(response)
+		// })
 	}
 
 }
