@@ -1,0 +1,37 @@
+<aside id="leftsidebar" class="sidebar">
+    <div class="navbar-brand">
+        <button class="btn-menu ls-toggle-btn" type="button">
+            <i class="zmdi zmdi-menu"></i>
+        </button>
+        <span class="m-l-10">Deep Learning Studio</span>
+    </div>
+    <div class="menu">
+        <ul class="list">
+            <li>
+                <div class="user-info">
+                    <a class="image" href="profile.html"><img src="assets/images/profile_av.jpg" alt="User" /></a>
+                    <div class="detail">
+                        <p>{{userName}}</p>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <a href="javascript:void(0);" class="menu-toggle"><i
+                        class="zmdi zmdi-assignment"></i><span>Projects</span></a>
+                <ul class="ml-menu">
+                    <li><a routerLink="/projectlist" routerLinkActive="active">Projects List</a></li>
+                </ul>
+                <a routerLink="/description" routerLinkActive="active"><i
+                        class="zmdi zmdi-assignment"></i><span>Description</span></a>
+                <a href="javascript:void(0);" class="menu-toggle"><i
+                        class="zmdi zmdi-assignment"></i><span>Pre-processing</span></a>
+                <a href="javascript:void(0);" class="menu-toggle"><i
+                        class="zmdi zmdi-assignment"></i><span>Visualization</span></a>
+            </li>
+            <li>
+                <a href="javascript:void(0);" class="menu-toggle"><i
+                        class="zmdi zmdi-assignment"></i><span>Training</span></a>
+            </li>
+        </ul>
+    </div>
+</aside>

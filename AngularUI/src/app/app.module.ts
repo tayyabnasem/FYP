@@ -5,6 +5,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { FileUploadModule } from 'ng2-file-upload';
 import { SocialLoginModule, SocialAuthServiceConfig, GoogleLoginProvider } from 'angularx-social-login';
+import { NgCircleProgressModule } from 'ng-circle-progress';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -22,6 +23,8 @@ import { ProfileComponent } from './profile/profile.component';
 import { ModelComponent } from './components/model/model.component';
 import { SortableModule } from '@progress/kendo-angular-sortable';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NavbarComponent } from './components/navbar/navbar.component';
+
 
 
 
@@ -38,6 +41,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
         ProjectlistComponent,
         ProfileComponent,
         ModelComponent,
+        NavbarComponent,
     ],
     imports: [
         BrowserModule,
@@ -48,7 +52,12 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
         RouterModule,
         SocialLoginModule,
         SortableModule,
-        BrowserAnimationsModule
+        BrowserAnimationsModule,
+        NgCircleProgressModule.forRoot({
+                outerStrokeWidth: 10,
+                outerStrokeColor: "#0c7ce6",
+                innerStrokeColor: "#ffffff",
+                animationDuration: 500})
     ],
     providers: [
         ShareDataService,

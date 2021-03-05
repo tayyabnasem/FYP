@@ -1,3 +1,5 @@
+<app-navbar></app-navbar>
+
 <section class="content">
     <div class="body_scroll">
         <div class="block-header">
@@ -71,9 +73,9 @@
                                         <input type="number" class="form-control text-center" name="Learningrate"
                                             [(ngModel)]="trainingData.learningRate">
                                         <div class="input-group-append">
-                                            <div class="input-group-text cursor-p" (click)="onEpochUp()"><i
+                                            <div class="input-group-text cursor-p" (click)="onLearningRateUp()"><i
                                                     class="zmdi zmdi-chevron-up"></i></div>
-                                            <div class="input-group-text cursor-p" (click)="onEpochDown()"><i
+                                            <div class="input-group-text cursor-p" (click)="onLearningRateDown()"><i
                                                     class="zmdi zmdi-chevron-down"></i></div>
                                         </div>
                                     </div>
@@ -105,24 +107,56 @@
                                     <div class="input-group spinner">
                                         <select class="form-control show-tick ms" style="padding: 9px;" name="batchSize"
                                             [(ngModel)]="trainingData.lossFunction">
+                                            <option>Binary Crossentropy</option>
+                                            <option>Categorical Crossentropy </option>
                                             <option>Mean Absolute Error</option>
                                             <option>Mean Absolute Percentage Error</option>
                                             <option>Mean Squared Error</option>
                                             <option>Mean Squared Logarithmic Error</option>
                                             <option>Categorical Hinge Loss</option>
                                             <option>Huber loss value</option>
+
                                         </select>
                                     </div>
                                 </div>
                             </div>
                             <br>
                             <div class="row">
-                                <div class="col">
-                                    <p><b>Split the Dataset</b></p>
-
+                                <div class="col-6">
+                                    <label for="optimizer">Optimizer</label>
+                                    <i style="cursor: pointer;" data-toggle="modal" data-target="#optimizer"
+                                        class=" quest fa fa-question-circle" aria-hidden="true"></i>
+                                    <div class="input-group spinner">
+                                        <select class="form-control show-tick ms" style="padding: 9px;" name="optimizer"
+                                            [(ngModel)]="trainingData.optimizer">
+                                            <option>Adam</option>
+                                            <option>SGD</option>
+                                            <option>RMSprop</option>
+                                            <option>Adadelta</option>
+                                            <option>Adagrad</option>
+                                            <option>Adamax</option>
+                                            <option>Nadam</option>
+                                            <option>Ftrl</option>
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div class="card">
+                        <div class="header">
+                            <h2><strong>Split the Dataset</strong></h2>
+                        </div>
+                        <div class="body">
+                            <div class="row">
+                                <label for="customRange1" class="sp form-label">Training </label>
+                                <div>
+                                    <input style="width: 700px;" type="range" class="form-range" id="customRange1">
+                                </div>
+                                <label for="customRange1" class="sp form-label">Testing </label>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -162,7 +196,7 @@
                             <div class="clearfix">
                                 <select class="form-control show-tick ms" style="padding: 9px;"
                                     name="activationFunction" [(ngModel)]="selectedLayerData.activationFunction">
-                                    <option>None</option>
+                                    <option>Default</option>
                                     <option>Relu</option>
                                     <option>Sigmoid</option>
                                     <option>Softmax</option>
@@ -234,16 +268,16 @@
                             <div class="clearfix">
                                 <select class="form-control show-tick ms" style="padding: 9px;"
                                     name="activationFunction" [(ngModel)]="newLayerData.activationFunction">
-                                    <option>default</option>
-                                    <option>relu</option>
-                                    <option>sigmoid</option>
-                                    <option>softmax</option>
-                                    <option>softplus</option>
-                                    <option>softsign</option>
-                                    <option>tanh</option>
-                                    <option>selu</option>
-                                    <option>elu</option>
-                                    <option>exponential</option>
+                                    <option>Default</option>
+                                    <option>Relu</option>
+                                    <option>Sigmoid</option>
+                                    <option>Softmax</option>
+                                    <option>Softplus</option>
+                                    <option>Softsign</option>
+                                    <option>Tanh</option>
+                                    <option>Selu</option>
+                                    <option>Elu</option>
+                                    <option>Exponential</option>
                                 </select>
                             </div>
                         </div>
@@ -320,6 +354,24 @@
             <div class="tsize modal-body"> At its core, a loss function is incredibly simple: it's a method of
                 evaluating how well your algorithm models your dataset. If your predictions are totally off, your loss
                 function will output a higher number. If they're pretty good, it'll output a lower number. </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary waves-effect" data-dismiss="modal">CLOSE</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="optimizer" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="title" id="defaultModalLabel">Optimizer</h4>
+            </div>
+            <div class="tsize modal-body"> Optimizers are algorithms or methods used to change the attributes of your
+                neural network such as weights and learning rate in order to reduce the losses. How you should change
+                your weights or learning rates of your neural network to reduce the losses is defined by the optimizers
+                you use.
+            </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary waves-effect" data-dismiss="modal">CLOSE</button>
             </div>

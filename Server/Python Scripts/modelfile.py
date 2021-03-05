@@ -1,12 +1,17 @@
-import tensorflow as tf
-from tensorflow import keras
-from tensorflow.keras import layers
+import pandas as pd
+import numpy as np
 
-model = keras.Sequential()
-model.add(layers.Dense(24))
+df = pd.read_csv("C:\\Users\\User\\Downloads\\archive (1)\weatherAUS.csv")
+#"C:\Users\User\Downloads\archive (1)\weatherAUS.csv"
 
-model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+labels = df['RainToday'].unique().tolist()
+labels = list(filter(lambda label: not label is np.nan, labels))
 
-for layer in model.layers:
-    print(layer.name)
+print(labels)
+print(df['RainToday'].value_counts())
 
+print(df['RainToday'].value_counts().values)
+
+print(df['RainToday'].isnull().sum())
+
+print(df['RainToday'].shape)

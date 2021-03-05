@@ -50,11 +50,12 @@ export class SigninComponent implements OnInit {
           this.signinService.postData(signinWithGoogleUrl, dataToSend).subscribe((response) => {
             console.log("Sign in with Google Response: ",response)
             if (response.text === "Logged in") {
-              this.router.navigateByUrl('dashboard')
+              this.router.navigate(['dashboard'], {replaceUrl: true})
+              //this.router.navigateByUrl('dashboard')
             }
           })
         } else if (response.text === "OK") {
-          this.router.navigateByUrl('dashboard')
+          this.router.navigate(['dashboard'], {replaceUrl: true})
         }
       })
     })
@@ -70,7 +71,7 @@ export class SigninComponent implements OnInit {
     this.signinService.postData(signinUrl, this.model).subscribe((data: any) => {
       console.log(data)
       if (data.text === "Logged in") {
-        this.router.navigateByUrl('dashboard')
+        this.router.navigate(['dashboard'], {replaceUrl: true})
       }
     })
   }

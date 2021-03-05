@@ -11,19 +11,20 @@ export class ModelComponent implements OnInit {
 	newLayerData: any = {
 		layerName: "Dense",
 		units: 1,
-		activationFunction: "default"
+		activationFunction: "Default"
 	}
 	selectedLayerData: any = {
 		layerName: "",
 		units: 1,
 		activationFunction: "",
 	}
-  trainingData: any = {
-    epoch:1,
-    learningRate:0.01,
-    lossFunction: "",
-    batchSize: 16
-  }
+	trainingData: any = {
+		epoch: 50,
+		learningRate: 0.01,
+		lossFunction: "Binary Crossentropy",
+		batchSize: 16,
+		optimizer: "Adam"
+	}
 	selectedLayerIndex: number = 0
 	layerModel: any[] = []
 
@@ -40,38 +41,52 @@ export class ModelComponent implements OnInit {
 
 	onSpinDownUpdate() { if (this.selectedLayerData.units > 1) this.selectedLayerData.units -= 1; }
 
-  onEpochUp() { this.trainingData.epoch += 1; }
+	onEpochUp() { this.trainingData.epoch += 1; }
 
 	onEpochDown() { if (this.trainingData.epoch > 1) this.trainingData.epoch -= 1; }
+
+	onLearningRateUp() {
+		if (this.trainingData.learningRate < 1) {
+			this.trainingData.learningRate = parseFloat(this.trainingData.learningRate) + 0.01;
+			this.trainingData.learningRate = this.trainingData.learningRate.toFixed(2);
+		} 
+	}
+
+	onLearningRateDown() { 
+		if (this.trainingData.learningRate > 0.01) {
+			this.trainingData.learningRate = parseFloat(this.trainingData.learningRate) - 0.01;
+			this.trainingData.learningRate = this.trainingData.learningRate.toFixed(2); 
+		}
+	}
 
 	addLayer() {
 		this.layerModel = [...this.layerModel, this.newLayerData]
 		this.newLayerData = {
 			layerName: "Dense",
 			units: 1,
-			activationFunction: "None"
+			activationFunction: "Default"
 		}
-		console.log(this.layerModel)
+		//console.log(this.layerModel)
 	}
 
 	selectLayer(item: any) {
 		this.selectedLayerIndex = this.layerModel.indexOf(item)
 		console.log("Item", item)
 		this.selectedLayerData = JSON.parse(JSON.stringify(item));
-		console.log(this.selectedLayerIndex)
+		//console.log(this.selectedLayerIndex)
 	}
 
 	updateLayerData() {
 		this.layerModel[this.selectedLayerIndex] = this.selectedLayerData
 		this.layerModel = [... this.layerModel]
-		console.log(this.layerModel)
+		//console.log(this.layerModel)
 	}
 
 	generateModel() {
-		// let url = "http://localhost:3000/generatemodel"
-		// this.apiCall.postData(url, this.layerModel).subscribe((response)=>{
-		// 	console.log(response)
-		// })
+		let url = "http://localhost:3000/generatemodel"
+		this.apiCall.postData(url, this.layerModel).subscribe((response) => {
+			console.log(response)
+		})
 	}
 
 }

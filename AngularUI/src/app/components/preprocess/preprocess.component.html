@@ -1,3 +1,5 @@
+<app-navbar></app-navbar>
+
 <body class="theme-blush">
     <section class="content">
         <div class="body_scroll">
@@ -18,9 +20,8 @@
                                         <h6>Dataset</h6>
                                     </div>
                                     <div class="body">
-                                        <div class="dropzone" ng2FileDrop [uploader]="uploader">
-                                            <h3>Drag and Drop file here</h3>
-                                            <h3>or</h3>
+
+                                        <div class="col text-center">
                                             <label for="upload-photo" class="btn btn-primary">Browse for file</label>
                                             <input type="file" name="photo" id="upload-photo" ng2FileSelect
                                                 [uploader]="uploader" accept=".csv, .json" />
@@ -29,20 +30,79 @@
                                                 [disabled]="!uploader.getNotUploadedItems().length">
                                                 Upload
                                             </button>
+                                            <button #hiddenBtn [hidden]="true" data-toggle="modal"
+                                                data-target="#errorModal">Error modal</button>
+                                        </div>
+
+                                        <div class="col text-center" *ngIf="file_name != ''">
+                                            <hr>
+                                            <div class="row">
+                                                <!-- <img src="../../../assets/images/excel.svg" width="32"
+                                                    height="32" /> -->
+                                                <div class="col">
+                                                    <div *ngIf="progress != 100"
+                                                        class="progress-container progress-primary">
+                                                        <span class="progress-badge">{{file_name}}</span>
+                                                        <div class="progress">
+                                                            <div class="progress-bar progress-bar-warning"
+                                                                role="progressbar" [style.width]="progress + '%'">
+                                                                <span class="progress-value">{{progress}}%</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div *ngIf="progress == 100" class="alert alert-success"
+                                                        role="alert">
+                                                        <div class="container">
+                                                            <div class="alert-icon">
+                                                                <i class="zmdi zmdi-thumb-up"></i>
+                                                            </div>
+                                                            Dataset Successfully Uploaded.
+                                                            <button type="button" class="close" data-dismiss="alert"
+                                                                aria-label="Close">
+                                                                <span aria-hidden="true">
+                                                                    <i class="zmdi zmdi-close"></i>
+                                                                </span>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                    <div *ngIf="data_error" class="alert alert-danger" role="alert">
+                                                        <div class="container">
+                                                            <div class="alert-icon">
+                                                                <i class="zmdi zmdi-block"></i>
+                                                            </div>
+                                                            {{data_error}}
+                                                            <button type="button" class="close" data-dismiss="alert"
+                                                                aria-label="Close">
+                                                                <span aria-hidden="true">
+                                                                    <i class="zmdi zmdi-close"></i>
+                                                                </span>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                    <!-- <div class="progress" style="height: 20px">
+                                                        <div class="progress-bar progress-bar-striped progress-bar-animated"
+                                                            style="height: 20px;" role="progressbar"
+                                                            [style.width]="progress + '%'">
+                                                            {{progress}}
+                                                        </div>
+                                                    </div> -->
+                                                </div>
+                                            </div>
+                                            <hr>
                                         </div>
                                     </div>
                                 </div>
                                 <br>
-                                <div class="card">
+                                <div class="card" *ngIf="columnsData.length != 0">
                                     <div class="header">
                                         <h6>Filter</h6>
                                     </div>
                                     <div class="body">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value=""
-                                                id="flexCheckDefault">
+                                        <div class="checkbox">
+                                            <input type="checkbox" [(ngModel)]="over_all_dataset_options.drop_rows"
+                                                id="flexCheckDefault" checked>
                                             <label class="form-check-label" for="flexCheckDefault">
-                                                Do you want to drop rows with null values?
+                                                Drop rows with null values
                                             </label>
                                         </div>
                                         <div class="split">
@@ -53,22 +113,30 @@
                                                             <tr>
                                                                 <th>Include</th>
                                                                 <th>Column Name</th>
-                                                                <th></th>
+                                                                <th class="text-center">Options</th>
+                                                                <th>Error</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
                                                             <tr *ngFor="let item of columnsData; let i = index;">
-                                                                <td><label class="switch">
+                                                                <td>
+                                                                    <label class="switch">
                                                                         <input type="checkbox" name="{{item.name}}"
-                                                                            (click)="onColumnSelect(item.name, i)">
+                                                                            (click)="onColumnSelect(item.name, i)"
+                                                                            [(ngModel)]="model[this.columnsData[i].name].include"
+                                                                            checked>
                                                                         <span class="slider round"></span>
                                                                     </label>
                                                                 </td>
                                                                 <td style="cursor:default">{{item.name}}</td>
-                                                                <td style="cursor:pointer" (click)="onColumnClick(i)"
+                                                                <td style="cursor:pointer;" class="text-center" (click)="onColumnClick(i)"
                                                                     data-toggle="modal" data-target="#popup">
                                                                     <i class="fa fa-sliders-h" aria-hidden="true"></i>
                                                                 </td>
+                                                                <td *ngIf="columns_error[i].replacement_error">
+                                                                    <i class="fas fa-exclamation-circle"></i>
+                                                                </td>
+                                                                
                                                             </tr>
                                                         </tbody>
                                                     </table>
@@ -88,11 +156,12 @@
     </section>
 </body>
 
-<div class="modal fade" id="popup" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div *ngIf="columnsData.length != 0" class="modal fade" id="popup" tabindex="-1" role="dialog"
+    aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Settings
+                <h5 class="modal-title" id="exampleModalLabel">{{statsToDisplay.name}}
                 </h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -105,10 +174,6 @@
                             <div class="col font-16"><b>Info</b></div>
                         </div>
                         <div class="row">
-                            <div class="col">
-                                <b>Name </b>: {{statsToDisplay.name}}
-
-                            </div>
                             <div class="col">
                                 <b>Type </b>: {{statsToDisplay.type}}
 
@@ -145,10 +210,12 @@
                         <div *ngIf="!isInteger">
                             <div class="col">
                                 <div class="row">
-                                    <p><b>Labels</b></p>
+                                    <p class="col"><b>Labels</b></p>
+                                    <p class="col"><b>Count</b></p>
                                 </div>
                                 <div class="row" *ngFor="let label of statsToDisplay.labels">
-                                    <p>{{label}}</p>
+                                    <p class="col">{{label[0]}}</p>
+                                    <p class="col">{{label[1]}}</p>
                                 </div>
                             </div>
                         </div>
@@ -162,28 +229,61 @@
                             <div class="row">
                                 <label class="col" for="impute">Impute
                                     With:</label>
-                                <select class=" col form-control show-tick ms" id="impute" name="impute"
-                                    [(ngModel)]="model[this.columnsData[selected_column].name][1]">
+                                <select *ngIf="isInteger" [disabled]="over_all_dataset_options.drop_rows"
+                                    class=" col form-control show-tick ms" id="impute" name="imputeInt"
+                                    [(ngModel)]="model[this.columnsData[selected_column].name].impute_int_with">
                                     <option value="mean">Mean</option>
                                     <option value="median">Median</option>
                                 </select>
+                                <input *ngIf="!isInteger" [disabled]="over_all_dataset_options.drop_rows"
+                                    class=" col form-control" type="text" name="imputeStr"
+                                    [(ngModel)]="model[this.columnsData[selected_column].name].impute_str_with">
+
                             </div>
                             <br>
                             <div class="row">
                                 <div class="col">
                                     <label for="">Replace this value</label>
-                                    <input class="form-control" type="text" name="replacevalue"
-                                        [(ngModel)]="model[this.columnsData[selected_column].name][3].replacevalue">
+                                    <input class="form-control" type="text" name="replacevalue" ngModel
+                                        #replacevalue="ngModel"
+                                        [(ngModel)]="model[this.columnsData[selected_column].name].replacevalue">
                                 </div>
                                 <div class="col">
                                     <label for="">Replace with</label>
-                                    <input class="form-control" type="text" name="replacewith"
-                                        [(ngModel)]="model[this.columnsData[selected_column].name][3].replacewith">
+                                    <input class="form-control" type="text" name="replacewith" #replacewith
+                                        [(ngModel)]="model[this.columnsData[selected_column].name].replacewith">
                                 </div>
                             </div>
+                            <div *ngIf="columns_error[selected_column].replacement_error">
+                                <p class="red small">{{columns_error[selected_column].replacement_error}}</p>
+                            </div>
+                            <!-- <div *ngIf="replacevalue.touched">
+                                <p *ngIf="" class="red small">Project Name must be entered</p>
+                            </div> -->
                         </form>
                     </div>
                 </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" (click)="logModel()">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Error</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="col">Only File types csv and json allowed</div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

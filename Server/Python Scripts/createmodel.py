@@ -9,8 +9,8 @@ lines = ["from tensorflow import keras",
 
 for layer in model_layers:
     layer_str = f"model.add(layers.{layer['layerName']}(units={layer['units']}"
-    if layer['activationFunction'] != 'default':
-        layer_str += f", activation='{layer['activationFunction']}'))"
+    if layer['activationFunction'] != 'Default':
+        layer_str += f", activation='{layer['activationFunction'].lower()}'))"
     else:
         layer_str += f"))"
 

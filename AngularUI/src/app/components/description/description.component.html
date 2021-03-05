@@ -1,3 +1,5 @@
+<app-navbar></app-navbar>
+
 <body class="theme-blush">
     <section class="content">
         <div class="body_scroll">
@@ -7,7 +9,8 @@
                         <h2>Project Description</h2>
                     </div>
                     <div class="col-lg-5 col-md-6 col-sm-12">
-                        <button class="btn btn-primary btn-icon float-right right_icon_toggle_btn" type="button" title="Next" (click)="next()">
+                        <button class="btn btn-primary btn-icon float-right right_icon_toggle_btn" type="button"
+                            title="Next" (click)="next()">
                             <i class="zmdi zmdi-arrow-right"></i>
                         </button>
                     </div>
@@ -23,11 +26,16 @@
                                 <form>
                                     <label>Project Name</label>
                                     <div class="form-group">
-                                        <input type="text" class="form-control" placeholder="Enter your project name" />
+                                        <input type="text" class="form-control" [(ngModel)]="model.name" name="projectname"
+                                            placeholder="Enter your project name" pattern="^[\w\s]+$" ngModel #projectname="ngModel" required/>
                                     </div>
-                                    <label>Project Description</label>
+                                    <div *ngIf="projectname.touched">
+                                        <p *ngIf="projectname.errors?.required" class="red small">Project Name must be entered</p>
+                                        <p *ngIf="projectname.errors?.pattern" class="red small">Name can only contain alphabets, numbers and spaces</p>
+                                    </div>
+                                    <label>Project Description (optional)</label>
                                     <div class="form-group">
-                                        <input type="text" class="form-control"
+                                        <input type="text" class="form-control" [(ngModel)]="model.description" name="projectdescription"
                                             placeholder="Enter your project description" />
                                     </div>
                                 </form>
@@ -59,75 +67,18 @@
                                     <img src="../../../assets/images/{{deeplearningicon}}.svg">
                                 </div>
                                 <h4 class="mt-3">Deep Learning</h4>
-                                
+
                             </div>
                         </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col" style="text-align: end;">
+                        <button class="btn btn-primary" [disabled]="projectname.errors"
+                            (click)="createProject()">Create Project</button>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-    <!-- <section class="content">
-        <div class="body_scroll">
-            <div class="block-header">
-                <div class="row">
-                    <div class="col-lg-7 col-md-6 col-sm-12">
-                        <h2>Project Description</h2>
-                    </div>
-                </div>
-            </div>
-            <div class="container-fluid">
-                <div class="row clearfix">
-                    <div class="col-md-12 col-sm-12 col-xs-12">
-                        <div class="card project_list">
-                            <div class="table-responsive">
-                                <br>
-                                <form #descriptform="ngForm" (ngSubmit)="onSubmit()">
-                                    <h5>Enter Project Name</h5>
-                                    <textarea name="name" [(ngModel)]="model.name" rows="1" cols="75"
-                                        #name="ngModel"></textarea>
-                                    <br>
-                                    <br>
-                                    <h5>Enter Project Description</h5>
-                                    <textarea name="description" [(ngModel)]="model.description" rows="2" cols="75"
-                                        #description="ngModel"></textarea>
-                                    <br>
-                                    <br>
-                                    <h5>Choose your Domain</h5>
-                                    <span id="radio2">
-                                        <input type="radio" id="ML" name="ML" value="ML" [(ngModel)]="selectedRadio"
-                                            (click)="onRadioClick()" />
-                                        <label for="ML">Machine Learning</label>
-                                    </span>
-                                    <input type="radio" id="DL" name="DL" value="DL" [(ngModel)]="selectedRadio"
-                                        (click)="onRadioClick()" />
-                                    <label for="DL">Deep Learning</label>
-                                    <div *ngIf="isValid && isVisible">
-
-                                        <select id="ML" name="ML">
-                                            <option value="Classification">Classification</option>
-                                            <option value="Regression"> Regression</option>
-                                            <option value="Clustering"> Clustering</option>
-                                        </select>
-                                    </div>
-
-                                    <div *ngIf="!isValid  && isVisible">
-
-                                        <select id="DL" name="DL">
-                                            <option value="ANN">ANN</option>
-                                            <option value="RNN">RNN</option>
-                                            <option value="LSTM">LSTM</option>
-                                        </select>
-                                    </div>
-                                </form>
-                                <div class="nbtn">
-                                    <button type="button" class="btn btn-success btn-s" (click)="next()">Next</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section> -->
 </body>

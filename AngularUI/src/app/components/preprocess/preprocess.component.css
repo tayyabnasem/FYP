@@ -282,10 +282,10 @@ a.article:hover {
   .slider {
     position: absolute;
     cursor: pointer;
-    top: 0;
-    left: 0;
+    top: 2px;
+    left: 2px;
     right: 0;
-    bottom: 0;
+    bottom: 5px;
     background-color: #ccc;
     -webkit-transition: .4s;
     transition: .4s;
@@ -294,8 +294,8 @@ a.article:hover {
   .slider:before {
     position: absolute;
     content: "";
-    height: 26px;
-    width: 26px;
+    height: 20px;
+    width: 20px;
     left: 4px;
     bottom: 4px;
     background-color: white;
@@ -471,5 +471,24 @@ h3{
     border-radius: 21px;
     padding: 8px 16px;
     cursor: pointer;
+}
+
+section.content{
+    transition: all 0.5s;
+    border-radius: 10px;
+    background: #f5f5f5;
+    border: 5px solid #fff;
+    padding: 10px;
+    position: relative;
+    margin: 20px 20px 20px 260px;
+    box-shadow: 0 0 16px rgb(41 42 51 / 6%), 0 6px 20px rgb(41 42 51 / 2%);
+}
+
+.red{
+    color: red;
+}
+
+.small{
+    font-size: small;
 }
  

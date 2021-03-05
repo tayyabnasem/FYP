@@ -8,6 +8,17 @@ body {
     /* background-color: #e8f0fe; */
 }
 
+section.content{
+    transition: all 0.5s;
+    border-radius: 10px;
+    background: #f5f5f5;
+    border: 5px solid #fff;
+    padding: 10px;
+    position: relative;
+    margin: 20px 20px 20px 260px;
+    box-shadow: 0 0 16px rgb(41 42 51 / 6%), 0 6px 20px rgb(41 42 51 / 2%);
+}
+
 .drop {
     color: #202124;
     font-size: 13px;

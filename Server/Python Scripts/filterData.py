@@ -8,18 +8,28 @@ columns_to_select = []
 
 df = pd.read_csv(filepath)
 
+over_all_data_options = data['over_all_dataset_options']
+data = data['column_wise_options']
+
+#print(column_wise_data_options)
+
 for column in data:
-    if data[column][0] == True:
+    if data[column]['include'] == True:
         columns_to_select.append(column)
-        if data[column][2] == "string":
-            if (data[column][1] == "mean"):
+
+df = df[columns_to_select]
+
+if (over_all_data_options['drop_rows']):
+    df.dropna(inplace=True)
+else:
+    for column in columns_to_select:
+        if data[column]['type'] != "String":
+            if (data[column]['impute_int_with'] == "mean"):
                 df[column].fillna(df[column].mean(), inplace=True)
             else:
                 df[column].fillna(df[column].median(), inplace=True)
         else:
-            df[column].fillna('None', inplace=True)
-
-df = df[columns_to_select]
+            df[column].fillna(data[column]['impute_str_with'], inplace=True)
 
 
 df.to_csv(filepath.split('.csv')[0]+'_preprocessed.csv', mode='w', index=False)
