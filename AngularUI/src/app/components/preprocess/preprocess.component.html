@@ -2,6 +2,21 @@
 
 <body class="theme-blush">
     <section class="content">
+        <div class="body">
+
+            <!-- Nav tabs -->
+            <ul class=" clr nav nav-tabs p-0 mb-3">
+                <li class="nav-item"><a class="nav-link" data-toggle="tab" routerLink="/description"
+                        routerLinkActive="active"><strong>Description</strong></a></li>
+                <li class="nav-item"><a class="nav-link active" data-toggle="tab" routerLink="/preprocess"
+                        routerLinkActive="active"><strong>Pre Processing</strong></a></li>
+                <li class="nav-item"><a class="nav-link" data-toggle="tab" routerLink="/visualize"
+                        routerLinkActive="active"><strong>Visualization</strong></a></li>
+                <li class="nav-item"><a class="nav-link" data-toggle="tab" routerLink="/model"
+                        routerLinkActive="active"><strong>Model</strong></a></li>
+            </ul>
+
+        </div>
         <div class="body_scroll">
             <div class="block-header">
                 <div class="row">
@@ -129,14 +144,15 @@
                                                                     </label>
                                                                 </td>
                                                                 <td style="cursor:default">{{item.name}}</td>
-                                                                <td style="cursor:pointer;" class="text-center" (click)="onColumnClick(i)"
-                                                                    data-toggle="modal" data-target="#popup">
+                                                                <td style="cursor:pointer;" class="text-center"
+                                                                    (click)="onColumnClick(i)" data-toggle="modal"
+                                                                    data-target="#popup">
                                                                     <i class="fa fa-sliders-h" aria-hidden="true"></i>
                                                                 </td>
                                                                 <td *ngIf="columns_error[i].replacement_error">
                                                                     <i class="fas fa-exclamation-circle"></i>
                                                                 </td>
-                                                                
+
                                                             </tr>
                                                         </tbody>
                                                     </table>
