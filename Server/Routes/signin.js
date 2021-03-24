@@ -5,11 +5,12 @@ const url = "mongodb://localhost:27017/";
 
 router.post('/', function (req, res) {
 	sess = req.session
+	console.log("Session",sess)
 	if (sess.email) {
 		console.log('Logged in User: ', sess.email)
 		res.send({ text: "Already Logged in", error: "None" })
 	} else {
-		console.log(req.body)
+		//console.log(req.body)
         var data = req.body
 		MongoClient.connect(url, { useUnifiedTopology: true }, function (err, client) {
 			if (err) {
@@ -17,7 +18,6 @@ router.post('/', function (req, res) {
 			} else {
 				var database = client.db("FYP")
 				const query = { email: data.email }
-				//const query = { $or: [ { userName: data.userName }, { email: data.userName} ] }
 				database.collection("Users").findOne(query, function (err, result) {
 					dataToReturnInResponse = { text: "", error: "None" }
 					if (result) {

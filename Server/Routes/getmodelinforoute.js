@@ -14,20 +14,11 @@ router.get('/', (req, res) => {
             var database = client.db("FYP")
             try {
                 const query = { _id: new ObjectId(req.query.project) }
-                const options = { projection: { data_statistics: 1, preprocessed_dataset_path: 1, preprocessing_options: 1 } }
+                const options = { projection: { model: 1 } }
                 database.collection("Projects").findOne(query, options, (err, result) => {
                     client.close()
                     if (result) {
-                        sess.preprocessed_data_path = result.preprocessed_dataset_path
-                        columns = []
-                        console.log(result)
-                        for (let i = 0; i < result.data_statistics.length; i++) {
-                            if (result.preprocessing_options.column_wise_options[result.data_statistics[i].name].include) {
-                                columns.push(result.data_statistics[i].name)
-                            }
-
-                        }
-                        res.send({ error: "None", columns: columns })
+                        res.send({ error: "None", data: result.model })
                     } else {
                         res.send({ error: "Project Not Found", data: [] })
                     }

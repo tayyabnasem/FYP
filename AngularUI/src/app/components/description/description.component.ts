@@ -19,15 +19,15 @@ export class DescriptionComponent implements OnInit {
   domainML: boolean
   name: any
 
-  deeplearningicon: any = 'deep-learning'
-  machinelearningicon: any = 'machine-learning-active'
+  deeplearningicon: any = 'deep-learning-active'
+  machinelearningicon: any = 'machine-learning'
 
   constructor(private router: Router, private apiCall: ApicallService) {
     this.isOpen = false;
-    this.model = { name: '', description: '', domain: 'Machine Learning' }
+    this.model = { name: '', description: '', domain: 'Deep Learning' }
     this.isValid = false;
     this.isVisible = false;
-    this.domainML = true;
+    this.domainML = false;
   }
 
   ngOnInit(): void {

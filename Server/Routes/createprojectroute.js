@@ -12,6 +12,7 @@ router.post('/', function (req, res) {
 	data['preprocessed_dataset_path']= ''
 	data['preprocessing_options'] = {}
 	data['data_statistics'] = []
+	data['model'] = {hyperparameters: {}, layers: []}
 	MongoClient.connect(url, { useUnifiedTopology: true }, function (err, client) {
 		if (err) {
 			res.send({ text: "None", error: err })

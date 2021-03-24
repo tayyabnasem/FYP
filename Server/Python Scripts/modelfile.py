@@ -1,6 +1,12 @@
 import pandas as pd
 import numpy as np
 
+from tensorflow.keras import losses
+
+
+
+losses.BinaryCrossentropy()
+
 df = pd.read_csv("C:\\Users\\User\\Downloads\\archive (1)\weatherAUS.csv")
 #"C:\Users\User\Downloads\archive (1)\weatherAUS.csv"
 

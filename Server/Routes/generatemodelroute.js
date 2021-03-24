@@ -28,7 +28,6 @@ router.post('/', function (req, res) {
 
 	python.on('exit', (code) => {
 		console.log("Process quit with code : " + code);
-        
 	});
 })
 

@@ -51,7 +51,7 @@
                                 [disabled]="password.errors || email.errors">Sign in</button>
                         </div>
                         <div class="signin_with mt-3">
-                            <p class="mb-0">or Sign Up using</p>
+                            <p class="mb-0">or Sign in using</p>
                             <button class="btn btn-primary btn-icon btn-round" (click)="signInWithGoogle()">
                                 <i class="fab fa-google"></i>
                             </button>
@@ -59,8 +59,10 @@
                     </div>
                 </form>
                 <div class="copyright text-center">
-                    &copy;
-                    <span>, All Rights Reserved</span>
+                    <span>Don't have an account? Click 
+                        <a routerLink="/signup" routerLinkActive="active">here</a>
+                        to register
+                    </span>
                 </div>
             </div>
             <div class="col-lg-8 col-sm-12">

@@ -2,7 +2,8 @@ const router = require('express').Router();
 
 router.get('/', (req, res) => {
     req.session = null
-    console.log(req.session)
+    //console.log(req.session)
+    //res.redirect('http://localhost:4200/')
     res.send({ text: "Succesfully Logged out" })
 })
 

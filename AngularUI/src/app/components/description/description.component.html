@@ -52,22 +52,22 @@
                 <div class="row clearfix">
                     <div class="col">
                         <div class="card w_data_1">
-                            <div class="body clickable" [ngClass]="{'active': domainML}" (click)="onClickML()">
-                                <div class="w_icon">
-                                    <img src="../../../assets/images/{{machinelearningicon}}.svg">
-                                </div>
-                                <h4 class="mt-3">Machine Learning</h4>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="card w_data_1">
                             <div class="body clickable" [ngClass]="{'active': !domainML}" (click)="onClickDL()">
                                 <div class="w_icon">
                                     <img src="../../../assets/images/{{deeplearningicon}}.svg">
                                 </div>
                                 <h4 class="mt-3">Deep Learning</h4>
 
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card w_data_1">
+                            <div class="body clickable" [ngClass]="{'active': domainML}" (click)="onClickML()">
+                                <div class="w_icon">
+                                    <img src="../../../assets/images/{{machinelearningicon}}.svg">
+                                </div>
+                                <h4 class="mt-3">Machine Learning</h4>
                             </div>
                         </div>
                     </div>

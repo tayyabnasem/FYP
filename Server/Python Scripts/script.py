@@ -13,7 +13,7 @@ if data['plottype'] == 'scatter':
     sns.scatterplot(x=df[data['x']], y=df[data['y']], hue=df[data['y']])
     #ax = df.plot(x = data['x'], y = data['y'], kind = 'scatter')
 elif data['plottype'] == 'bar':
-    if data['x'] == data['y']:
+    if data['x'] == data['y'] or df[data['x']].dtypes.name == 'object':
         sns.histplot(x=df[data['x']], hue=df[data['y']])
     else:
         sns.histplot(x=df[data['x']], hue=df[data['y']],element='step')

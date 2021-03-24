@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { ApicallService } from 'src/app/services/apicall.service';
 
 @Component({
   selector: 'app-navbar',
@@ -9,9 +11,17 @@ export class NavbarComponent implements OnInit {
 
   userName: String = "Tayyab Naseem Minhas"
 
-  constructor() { }
+  constructor(private apiCall: ApicallService, private router: Router) { }
 
   ngOnInit(): void {
+  }
+
+  logout() {
+    let url = "http://localhost:3000/signout"
+    this.apiCall.getData(url).subscribe((response: any) => {
+      console.log(response)
+      this.router.navigate([''])
+    })
   }
 
 }

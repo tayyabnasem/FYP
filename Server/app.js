@@ -16,6 +16,9 @@ const signoutroute = require('./Routes/signoutroute')
 const generatemodelroute = require('./Routes/generatemodelroute')
 const getDataStisticsroute = require('./Routes/getDatasetStatistics')
 const getColumnsForPlotroute = require('./Routes/getcolumnsforplotroute')
+const saveModelroute = require('./Routes/savemodel')
+const getModelInforoute = require('./Routes/getmodelinforoute')
+const saveHyperparameterroute = require('./Routes/savehyperparametersroute')
 
 var jsonParser = bodyParser.json()
 
@@ -35,6 +38,9 @@ app.use('/signout', signoutroute)
 app.use('/generatemodel', generatemodelroute)
 app.use('/getDatasetStaictics', getDataStisticsroute)
 app.use('/getColumns', getColumnsForPlotroute)
+app.use('/saveModel', saveModelroute)
+app.use('/getModelInfo', getModelInforoute)
+app.use('/saveHyperparameter', saveHyperparameterroute)
 
 app.use(express.static(__dirname));
 

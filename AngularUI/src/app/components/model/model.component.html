@@ -6,13 +6,13 @@
         <!-- Nav tabs -->
         <ul class=" clr nav nav-tabs p-0 mb-3">
             <li class="nav-item"><a class="nav-link" data-toggle="tab" routerLink="/description"
-                    routerLinkActive="active"><strong>Description</strong></a></li>
-            <li class="nav-item"><a class="nav-link active" data-toggle="tab" routerLink="/preprocess"
-                    routerLinkActive="active"><strong>Pre Processing</strong></a></li>
+                    queryParamsHandling="preserve" routerLinkActive="active"><strong>Description</strong></a></li>
+            <li class="nav-item"><a class="nav-link" data-toggle="tab" routerLink="/preprocess"
+                    queryParamsHandling="preserve" routerLinkActive="active"><strong>Pre Processing</strong></a></li>
             <li class="nav-item"><a class="nav-link" data-toggle="tab" routerLink="/visualize"
-                    routerLinkActive="active"><strong>Visualization</strong></a></li>
-            <li class="nav-item"><a class="nav-link" data-toggle="tab" routerLink="/model"
-                    routerLinkActive="active"><strong>Model</strong></a></li>
+                    queryParamsHandling="preserve" routerLinkActive="active"><strong>Visualization</strong></a></li>
+            <li class="nav-item"><a class="nav-link active" data-toggle="tab" routerLink="/model"
+                    queryParamsHandling="preserve" routerLinkActive="active"><strong>Model</strong></a></li>
         </ul>
 
     </div>
@@ -46,6 +46,7 @@
                                                     (click)="selectLayer(item)" data-target="#exampleModalLong">
                                                     {{ item.layerName }}
                                                 </div>
+
                                             </li>
                                         </ol>
                                     </ng-template>
@@ -54,8 +55,8 @@
                             <div class="col text-center">
                                 <button class="btn btn-primary" data-toggle="modal" data-target="#newModalLong">New
                                     Layer</button>
-                                <button class="btn btn-success" [disabled]="layerModel.length == 0"
-                                    (click)="generateModel()">Generate Model</button>
+                                <button class="btn btn-success" [disabled]="layerModel.length == 0" data-toggle="modal"
+                                    data-target="#success-dialog" (click)="saveModel()">Save changes</button>
                             </div>
                         </div>
                     </div>
@@ -64,114 +65,129 @@
                             <h2><strong>TRAINING</strong></h2>
                         </div>
                         <div class="body">
-                            <div class="row">
-                                <div class="col">
-                                    <label for="epoch">Epoch</label>
-                                    <i style="cursor: pointer;" data-toggle="modal" data-target="#epoch"
-                                        class=" quest fa fa-question-circle" aria-hidden="true"></i>
-                                    <div class="input-group spinner">
-                                        <input type="number" class="form-control text-center" name="epoch"
-                                            [(ngModel)]="trainingData.epoch">
-                                        <div class="input-group-append">
-                                            <div class="input-group-text cursor-p" (click)="onEpochUp()"><i
-                                                    class="zmdi zmdi-chevron-up"></i></div>
-                                            <div class="input-group-text cursor-p" (click)="onEpochDown()"><i
-                                                    class="zmdi zmdi-chevron-down"></i></div>
+                            <form>
+                                <div class="row">
+                                    <div class="col">
+                                        <label for="epoch">Epoch</label>
+                                        <i style="cursor: pointer;" data-toggle="modal" data-target="#epoch"
+                                            class=" quest fa fa-question-circle" aria-hidden="true"></i>
+                                        <div class="input-group spinner">
+                                            <input type="number" class="form-control text-center" name="epochInput" #epochInput="ngModel"
+                                                (change)="checkEpochChange()" [(ngModel)]="trainingData.epoch" required>
+                                            <div class="input-group-append">
+                                                <div class="input-group-text cursor-p" (click)="onEpochUp()"><i
+                                                        class="zmdi zmdi-chevron-up"></i></div>
+                                                <div class="input-group-text cursor-p" (click)="onEpochDown()"><i
+                                                        class="zmdi zmdi-chevron-down"></i></div>
+                                            </div>
+                                        </div>
+                                        <div *ngIf="epochInput.touched">
+                                            <p *ngIf="epochInput.errors?.required" class="red small">It is a required field</p>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <label for="learningRate">Learning Rate</label>
+                                        <i style="cursor: pointer;" data-toggle="modal" data-target="#learningRate"
+                                            class=" quest fa fa-question-circle" aria-hidden="true"></i>
+                                        <div class="input-group spinner">
+                                            <input type="number" step="0.01" class="form-control text-center"
+                                                name="learningRateInput" [(ngModel)]="trainingData.learningRate"
+                                                (change)="checkLearningRateChange()" required
+                                                #learningRateInput="ngModel">
+                                            <div class="input-group-append">
+                                                <div class="input-group-text cursor-p" (click)="onLearningRateUp()"><i
+                                                        class="zmdi zmdi-chevron-up"></i></div>
+                                                <div class="input-group-text cursor-p" (click)="onLearningRateDown()"><i
+                                                        class="zmdi zmdi-chevron-down"></i></div>
+                                            </div>
+                                        </div>
+                                        <div *ngIf="learningRateInput.touched">
+                                            <p *ngIf="learningRateInput.errors?.required" class="red small">It is a required field</p>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <br>
+                                <div class="row">
+                                    <div class="col">
+                                        <label for="batchSize">Batch Size</label>
+                                        <i style="cursor: pointer;" data-toggle="modal" data-target="#batchSize"
+                                            class=" quest fa fa-question-circle" aria-hidden="true"></i>
+                                        <div class="input-group spinner">
+                                            <select class="form-control show-tick ms" style="padding: 9px;"
+                                                name="batchSize" [(ngModel)]="trainingData.batchSize">
+                                                <option>16</option>
+                                                <option>32</option>
+                                                <option>64</option>
+                                                <option>128</option>
+                                                <option>256</option>
+                                                <option>512</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <label for="lossFunction">Loss Function</label>
+                                        <i style="cursor: pointer;" data-toggle="modal" data-target="#lossFunction"
+                                            class=" quest fa fa-question-circle" aria-hidden="true"></i>
+                                        <div class="input-group spinner">
+                                            <select class="form-control show-tick ms" style="padding: 9px;"
+                                                name="lossFunction" [(ngModel)]="trainingData.lossFunction">
+                                                <option>Binary Crossentropy</option>
+                                                <option>Categorical Crossentropy </option>
+                                                <option>Sparse Categorical Crossentropy </option>
+                                                <option>Mean Absolute Error</option>
+                                                <option>Mean Absolute Percentage Error</option>
+                                                <option>Mean Squared Error</option>
+                                                <option>Mean Squared Logarithmic Error</option>
+
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col">
-                                    <label for="learningRate">Learning Rate</label>
-                                    <i style="cursor: pointer;" data-toggle="modal" data-target="#learningRate"
-                                        class=" quest fa fa-question-circle" aria-hidden="true"></i>
-                                    <div class="input-group spinner">
-                                        <input type="number" class="form-control text-center" name="Learningrate"
-                                            [(ngModel)]="trainingData.learningRate">
-                                        <div class="input-group-append">
-                                            <div class="input-group-text cursor-p" (click)="onLearningRateUp()"><i
-                                                    class="zmdi zmdi-chevron-up"></i></div>
-                                            <div class="input-group-text cursor-p" (click)="onLearningRateDown()"><i
-                                                    class="zmdi zmdi-chevron-down"></i></div>
+                                <br>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label for="optimizer">Optimizer</label>
+                                        <i style="cursor: pointer;" data-toggle="modal" data-target="#optimizer"
+                                            class=" quest fa fa-question-circle" aria-hidden="true"></i>
+                                        <div class="input-group spinner">
+                                            <select class="form-control show-tick ms" style="padding: 9px;"
+                                                name="optimizer" [(ngModel)]="trainingData.optimizer">
+                                                <option>Adam</option>
+                                                <option>SGD</option>
+                                                <option>RMSprop</option>
+                                                <option>Adadelta</option>
+                                                <option>Adagrad</option>
+                                                <option>Adamax</option>
+                                                <option>Nadam</option>
+                                                <option>Ftrl</option>
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
-
-                            </div>
-                            <br>
-                            <div class="row">
-                                <div class="col">
-                                    <label for="batchSize">Batch Size</label>
-                                    <i style="cursor: pointer;" data-toggle="modal" data-target="#batchSize"
-                                        class=" quest fa fa-question-circle" aria-hidden="true"></i>
-                                    <div class="input-group spinner">
-                                        <select class="form-control show-tick ms" style="padding: 9px;" name="batchSize"
-                                            [(ngModel)]="trainingData.batchSize">
-                                            <option>16</option>
-                                            <option>32</option>
-                                            <option>64</option>
-                                            <option>128</option>
-                                            <option>256</option>
-                                            <option>512</option>
-                                        </select>
+                                <br>
+                                <div class="header">
+                                    <h2><strong>Split the Dataset</strong></h2>
+                                </div>
+                                <div class="row">
+                                    <label for="customRange1" class="sp form-label">Training
+                                        ({{trainingData.validation_split}}%)</label>
+                                    <div>
+                                        <input style="width: 700px;" type="range" name="validationSplit"
+                                            [(ngModel)]="trainingData.validation_split" class="form-range"
+                                            id="customRange1">
                                     </div>
+                                    <label for="customRange1" class="sp form-label">Testing ({{100 -
+                                        trainingData.validation_split}}%) </label>
                                 </div>
-                                <div class="col">
-                                    <label for="lossFunction">Loss Function</label>
-                                    <i style="cursor: pointer;" data-toggle="modal" data-target="#lossFunction"
-                                        class=" quest fa fa-question-circle" aria-hidden="true"></i>
-                                    <div class="input-group spinner">
-                                        <select class="form-control show-tick ms" style="padding: 9px;" name="batchSize"
-                                            [(ngModel)]="trainingData.lossFunction">
-                                            <option>Binary Crossentropy</option>
-                                            <option>Categorical Crossentropy </option>
-                                            <option>Mean Absolute Error</option>
-                                            <option>Mean Absolute Percentage Error</option>
-                                            <option>Mean Squared Error</option>
-                                            <option>Mean Squared Logarithmic Error</option>
-                                            <option>Categorical Hinge Loss</option>
-                                            <option>Huber loss value</option>
-
-                                        </select>
-                                    </div>
+                                <div class="col text-center">
+                                    <button class="btn btn-primary" (click)="generateModel()"
+                                        [disabled]="layerModel.length == 0">Generate Model</button>
+                                    <button class="btn btn-success" (click)="saveHyperparameters()" data-toggle="modal"
+                                        data-target="#success-dialog">Save changes</button>
                                 </div>
-                            </div>
-                            <br>
-                            <div class="row">
-                                <div class="col-6">
-                                    <label for="optimizer">Optimizer</label>
-                                    <i style="cursor: pointer;" data-toggle="modal" data-target="#optimizer"
-                                        class=" quest fa fa-question-circle" aria-hidden="true"></i>
-                                    <div class="input-group spinner">
-                                        <select class="form-control show-tick ms" style="padding: 9px;" name="optimizer"
-                                            [(ngModel)]="trainingData.optimizer">
-                                            <option>Adam</option>
-                                            <option>SGD</option>
-                                            <option>RMSprop</option>
-                                            <option>Adadelta</option>
-                                            <option>Adagrad</option>
-                                            <option>Adamax</option>
-                                            <option>Nadam</option>
-                                            <option>Ftrl</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
+                            </form>
                         </div>
-                    </div>
-                    <div class="card">
-                        <div class="header">
-                            <h2><strong>Split the Dataset</strong></h2>
-                        </div>
-                        <div class="body">
-                            <div class="row">
-                                <label for="customRange1" class="sp form-label">Training </label>
-                                <div>
-                                    <input style="width: 700px;" type="range" class="form-range" id="customRange1">
-                                </div>
-                                <label for="customRange1" class="sp form-label">Testing </label>
-                            </div>
-                        </div>
-
                     </div>
                 </div>
             </div>
@@ -191,12 +207,12 @@
             </div>
             <div class="modal-body">
                 <form>
-                    <div class="row">
+                    <div *ngIf="selectedLayerData.layerName == 'Dense'" class="row">
                         <div class="col">
                             <label for="">Units</label>
                             <div class="input-group spinner">
                                 <input type="number" class="form-control text-center" name="units"
-                                    [(ngModel)]="selectedLayerData.units">
+                                    [(ngModel)]="selectedLayerData.Dense.units">
                                 <div class="input-group-append">
                                     <div class="input-group-text cursor-p" (click)="onSpinUpUpdate()"><i
                                             class="zmdi zmdi-chevron-up"></i></div>
@@ -210,7 +226,7 @@
                             <label for="">Activation Function</label>
                             <div class="clearfix">
                                 <select class="form-control show-tick ms" style="padding: 9px;"
-                                    name="activationFunction" [(ngModel)]="selectedLayerData.activationFunction">
+                                    name="activationFunction" [(ngModel)]="selectedLayerData.Dense.activationFunction">
                                     <option>Default</option>
                                     <option>Relu</option>
                                     <option>Sigmoid</option>
@@ -225,12 +241,25 @@
                             </div>
                         </div>
                     </div>
+                    <div *ngIf="selectedLayerData.layerName == 'Dropout'" class="row">
+                        <div class="col-6">
+                            <label for="">Dropout rate</label>
+                            <div class="input-group spinner">
+                                <input type="number" class="form-control text-center" step="0.01" name="DropoutRate"
+                                    [(ngModel)]="selectedLayerData.Dropout.dropoutRate">
+                                <div class="input-group-append">
+                                    <div class="input-group-text cursor-p" (click)="onDropoutRateUpUpdate()"><i
+                                            class="zmdi zmdi-chevron-up"></i></div>
+                                    <div class="input-group-text cursor-p" (click)="onDropoutRateDownUpdate()"><i
+                                            class="zmdi zmdi-chevron-down"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal"
-                    (click)="updateLayerData()">Update</button>
             </div>
         </div>
     </div>
@@ -255,18 +284,18 @@
                                 <select class="form-control show-tick ms" style="padding: 9px;" name="layerName"
                                     [(ngModel)]="newLayerData.layerName">
                                     <option>Dense</option>
-                                    <option>Convolution2D</option>
+                                    <option>Dropout</option>
                                 </select>
                             </div>
                         </div>
 
                     </div>
-                    <div class="row">
+                    <div *ngIf="newLayerData.layerName == 'Dense'" class="row">
                         <div class="col">
                             <label for="">Units</label>
                             <div class="input-group spinner">
                                 <input type="number" class="form-control text-center" name="units"
-                                    [(ngModel)]="newLayerData.units">
+                                    [(ngModel)]="newLayerData.Dense.units">
                                 <div class="input-group-append">
                                     <!-- <span class="input-group-text col" style="display: grid;"> -->
                                     <div class="input-group-text cursor-p" (click)="onSpinUp()"><i
@@ -282,7 +311,7 @@
                             <label for="">Activation Function</label>
                             <div class="clearfix">
                                 <select class="form-control show-tick ms" style="padding: 9px;"
-                                    name="activationFunction" [(ngModel)]="newLayerData.activationFunction">
+                                    name="activationFunction" [(ngModel)]="newLayerData.Dense.activationFunction">
                                     <option>Default</option>
                                     <option>Relu</option>
                                     <option>Sigmoid</option>
@@ -294,6 +323,21 @@
                                     <option>Elu</option>
                                     <option>Exponential</option>
                                 </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngIf="newLayerData.layerName == 'Dropout'" class="row">
+                        <div class="col-6">
+                            <label for="">Dropout rate</label>
+                            <div class="input-group spinner">
+                                <input type="number" class="form-control text-center" step="0.01" name="DropoutRate"
+                                    [(ngModel)]="newLayerData.Dropout.dropoutRate">
+                                <div class="input-group-append">
+                                    <div class="input-group-text cursor-p" (click)="onDropoutRateUp()"><i
+                                            class="zmdi zmdi-chevron-up"></i></div>
+                                    <div class="input-group-text cursor-p" (click)="onDropoutRateDown()"><i
+                                            class="zmdi zmdi-chevron-down"></i></div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -386,6 +430,23 @@
                 neural network such as weights and learning rate in order to reduce the losses. How you should change
                 your weights or learning rates of your neural network to reduce the losses is defined by the optimizers
                 you use.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary waves-effect" data-dismiss="modal">CLOSE</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="success-dialog" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="title" id="defaultModalLabel">Saved</h4>
+            </div>
+            <div class="modal-body text-center"><i style="width: 144px; height: 168px;" class="color fa fa-check-circle"
+                    aria-hidden="true"></i>
+                <div class="col text-center">The Data was Saved in Database </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary waves-effect" data-dismiss="modal">CLOSE</button>

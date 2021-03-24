@@ -16,6 +16,23 @@ input::-webkit-inner-spin-button {
     font-size: small;
 }
 .sp{
-    padding-left: 10px;
+    padding-left: 15px;
     padding-right: 10px;
+}
+
+.active{
+    border: 1px solid #e47297;
+    color: #e47297;
+}
+
+.color{
+    color: #28a745;
+}
+
+.red{
+    color: red;
+}
+
+.small{
+    font-size: small;
 }

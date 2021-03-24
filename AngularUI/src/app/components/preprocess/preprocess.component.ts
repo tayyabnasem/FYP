@@ -183,23 +183,23 @@ export class PreprocessComponent implements OnInit {
 
 		for (let i = 0; i < this.columnsData.length; i++) {
 			if (this.model[this.columnsData[i].name].include) {
-				let replacevalue = this.model[this.columnsData[i].name].replacevalue.split(':')
-				let replacewith = this.model[this.columnsData[i].name].replacewith.split(':')
+				// let replacevalue = this.model[this.columnsData[i].name].replacevalue.split(':')
+				// let replacewith = this.model[this.columnsData[i].name].replacewith.split(':')
 
-				console.log('Replace:', replacevalue)
-				console.log('With', replacewith)
+				// console.log('Replace:', replacevalue)
+				// console.log('With', replacewith)
 
-				if (replacevalue[replacevalue.length - 1].split(' ').join('') == "") {
-					replacevalue = replacevalue.slice(0, -1)
-				}
+				// if (replacevalue[replacevalue.length - 1].split(' ').join('') == "") {
+				// 	replacevalue = replacevalue.slice(0, -1)
+				// }
 
-				if (replacewith[replacewith.length - 1].split(' ').join('') == "") {
-					replacewith = replacewith.slice(0, -1)
-				}
+				// if (replacewith[replacewith.length - 1].split(' ').join('') == "") {
+				// 	replacewith = replacewith.slice(0, -1)
+				// }
 
-				if (replacevalue.length != replacewith.length) {
-					this.columns_error[i].replacement_error = 'Values To replace must be the same amount as values to be replaced with'
-				}
+				// if (replacevalue.length != replacewith.length) {
+				// 	this.columns_error[i].replacement_error = 'Values To replace must be the same amount as values to be replaced with'
+				// }
 
 				dataToSend.push(this.columnsData[i].name)
 			}

@@ -6,13 +6,13 @@
 
             <!-- Nav tabs -->
             <ul class=" clr nav nav-tabs p-0 mb-3">
-                <li class="nav-item"><a class="nav-link" data-toggle="tab" routerLink="/description"
+                <li class="nav-item"><a class="nav-link" data-toggle="tab" routerLink="/description" queryParamsHandling="preserve"
                         routerLinkActive="active"><strong>Description</strong></a></li>
-                <li class="nav-item"><a class="nav-link active" data-toggle="tab" routerLink="/preprocess"
+                <li class="nav-item"><a class="nav-link active" data-toggle="tab" routerLink="/preprocess" queryParamsHandling="preserve"
                         routerLinkActive="active"><strong>Pre Processing</strong></a></li>
-                <li class="nav-item"><a class="nav-link" data-toggle="tab" routerLink="/visualize"
+                <li class="nav-item"><a class="nav-link" data-toggle="tab" routerLink="/visualize" queryParamsHandling="preserve"
                         routerLinkActive="active"><strong>Visualization</strong></a></li>
-                <li class="nav-item"><a class="nav-link" data-toggle="tab" routerLink="/model"
+                <li class="nav-item"><a class="nav-link" data-toggle="tab" routerLink="/model" queryParamsHandling="preserve"
                         routerLinkActive="active"><strong>Model</strong></a></li>
             </ul>
 
@@ -129,7 +129,7 @@
                                                                 <th>Include</th>
                                                                 <th>Column Name</th>
                                                                 <th class="text-center">Options</th>
-                                                                <th>Error</th>
+                                                                <!-- <th>Error</th> -->
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -149,9 +149,9 @@
                                                                     data-target="#popup">
                                                                     <i class="fa fa-sliders-h" aria-hidden="true"></i>
                                                                 </td>
-                                                                <td *ngIf="columns_error[i].replacement_error">
+                                                                <!-- <td *ngIf="columns_error[i].replacement_error">
                                                                     <i class="fas fa-exclamation-circle"></i>
-                                                                </td>
+                                                                </td> -->
 
                                                             </tr>
                                                         </tbody>
@@ -270,9 +270,9 @@
                                         [(ngModel)]="model[this.columnsData[selected_column].name].replacewith">
                                 </div>
                             </div>
-                            <div *ngIf="columns_error[selected_column].replacement_error">
+                            <!-- <div *ngIf="columns_error[selected_column].replacement_error">
                                 <p class="red small">{{columns_error[selected_column].replacement_error}}</p>
-                            </div>
+                            </div> -->
                             <!-- <div *ngIf="replacevalue.touched">
                                 <p *ngIf="" class="red small">Project Name must be entered</p>
                             </div> -->
@@ -282,7 +282,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" (click)="logModel()">Save changes</button>
+                <!-- <button type="button" class="btn btn-primary" (click)="logModel()">Save changes</button> -->
             </div>
         </div>
     </div>
@@ -303,7 +303,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" (click)="logModel()">Save changes</button>
+                <!-- <button type="button" class="btn btn-primary" (click)="logModel()">Save changes</button> -->
             </div>
         </div>
     </div>
