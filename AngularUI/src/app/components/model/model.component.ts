@@ -1,13 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ApicallService } from 'src/app/services/apicall.service';
+import * as Prism from 'prismjs'
+import { io } from 'socket.io-client';
+import 'prismjs/components/prism-python'
 
 @Component({
 	selector: 'app-model',
 	templateUrl: './model.component.html',
-	styleUrls: ['./model.component.css']
+	styleUrls: ['./model.component.css'],
 })
 export class ModelComponent implements OnInit {
+
+	private socket: any
 
 	newLayerData: any = {
 		layerName: "Dense",
@@ -15,7 +20,7 @@ export class ModelComponent implements OnInit {
 			units: 1,
 			activationFunction: "Default",
 		},
-		Dropout:{
+		Dropout: {
 			dropoutRate: 0.2
 		}
 	}
@@ -25,7 +30,7 @@ export class ModelComponent implements OnInit {
 			units: 1,
 			activationFunction: "Default",
 		},
-		Dropout:{
+		Dropout: {
 			dropoutRate: 0.2
 		}
 	}
@@ -35,29 +40,41 @@ export class ModelComponent implements OnInit {
 		lossFunction: "Binary Crossentropy",
 		batchSize: 16,
 		optimizer: "Adam",
-		validation_split: 70
+		validation_split: 70,
+		output_coulmn: "Select Column"
 	}
 	selectedLayerIndex: number = 0
 	layerModel: any[] = []
+	columns: any[] = []
 	project_id: any
+	code: any = "[i for i in range(10)]"
+	traininglogs: any = ""
 
 
-	constructor(private apiCall: ApicallService, private route: ActivatedRoute) { }
+	constructor(private apiCall: ApicallService, private route: ActivatedRoute) {
+		this.socket = io('http://localhost:3000');
+	}
 
 	ngOnInit(): void {
 		this.route.queryParams.subscribe(params => {
 			this.project_id = params.project
-			let url = 'http://localhost:3000/getModelInfo?project=' + this.project_id
+			let url = "http://localhost:3000/getColumns?project=" + params.project
+			this.apiCall.getData(url).subscribe((data: any) => {
+				//console.log(data)
+				this.columns = data.columns
+			})
+			url = 'http://localhost:3000/getModelInfo?project=' + this.project_id
 			this.apiCall.getData(url).subscribe((response: any) => {
 				this.layerModel = response.data.layers
-				//console.log(Object.keys(response.data.hyperparameters).length)
 				if (Object.keys(response.data.hyperparameters).length !== 0) {
 					this.trainingData = response.data.hyperparameters
 				}
-				// console.log(response)
-				// console.log("Hyper", this.trainingData)
 			})
 		});
+		this.socket.on('logs', (data: any) => {
+			this.traininglogs += data+"<br>"
+		});
+		this.code = Prism.highlight(this.code, Prism.languages['python'])
 	}
 
 	onSpinUp() { this.newLayerData.Dense.units += 1; }
@@ -114,13 +131,13 @@ export class ModelComponent implements OnInit {
 		}
 	}
 
-	checkLearningRateChange(){
-		this.trainingData.learningRate < 0.01 ? this.trainingData.learningRate = 0.01 : this.trainingData.learningRate; 
+	checkLearningRateChange() {
+		this.trainingData.learningRate < 0.01 ? this.trainingData.learningRate = 0.01 : this.trainingData.learningRate;
 		this.trainingData.learningRate > 1.00 ? this.trainingData.learningRate = 1.00.toFixed(2) : this.trainingData.learningRate;
 	}
 
-	checkEpochChange(){
-		this.trainingData.epoch < 1 ? this.trainingData.epoch = 1 : this.trainingData.epoch; 
+	checkEpochChange() {
+		this.trainingData.epoch < 1 ? this.trainingData.epoch = 1 : this.trainingData.epoch;
 	}
 
 	addLayer() {
@@ -131,7 +148,7 @@ export class ModelComponent implements OnInit {
 				units: 1,
 				activationFunction: "Default",
 			},
-			Dropout:{
+			Dropout: {
 				dropoutRate: 0.2
 			}
 		}

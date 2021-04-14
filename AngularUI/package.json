@@ -31,7 +31,10 @@
     "jquery": "^3.5.1",
     "ng-circle-progress": "^1.6.0",
     "ng2-file-upload": "^1.4.0",
+    "ng2-prism": "^2.3.2",
+    "prismjs": "^1.9.0",
     "rxjs": "~6.6.0",
+    "socket.io-client": "^4.0.0",
     "tslib": "^2.0.0",
     "zone.js": "~0.10.2"
   },
@@ -41,6 +44,7 @@
     "@angular/compiler-cli": "~11.0.1",
     "@types/jasmine": "~3.6.0",
     "@types/node": "^12.11.1",
+    "@types/prismjs": "^1.9.0",
     "codelyzer": "^6.0.0",
     "jasmine-core": "~3.6.0",
     "jasmine-spec-reporter": "~5.0.0",

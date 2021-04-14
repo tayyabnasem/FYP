@@ -4,6 +4,16 @@ const bodyParser = require('body-parser')
 const session = require('express-session');
 
 const app = express()
+let server = app.listen(3000, function () {
+	console.log("server running")
+})
+const io = require('socket.io')(server, {
+	cors: {
+		origin: "http://localhost:4200",
+		methods: ["GET", "POST"]
+	}
+});
+
 const signinroute = require('./Routes/signin')
 const signuproute = require('./Routes/signup')
 const signinWithGoogleroute = require('./Routes/signinwithgoogle')
@@ -25,6 +35,10 @@ var jsonParser = bodyParser.json()
 app.use(cors({ origin: "http://localhost:4200", credentials: true }))
 app.use(session({ resave: true, secret: '123456', saveUninitialized: true }));
 app.use(jsonParser)
+app.use(function (req, res, next) {
+	req.io = io;
+	next();
+});
 
 app.use('/signin', signinroute)
 app.use('/signup', signuproute)
@@ -43,7 +57,3 @@ app.use('/getModelInfo', getModelInforoute)
 app.use('/saveHyperparameter', saveHyperparameterroute)
 
 app.use(express.static(__dirname));
-
-app.listen(3000, function () {
-	console.log("server running")
-})

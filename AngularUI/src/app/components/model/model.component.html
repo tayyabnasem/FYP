@@ -72,8 +72,9 @@
                                         <i style="cursor: pointer;" data-toggle="modal" data-target="#epoch"
                                             class=" quest fa fa-question-circle" aria-hidden="true"></i>
                                         <div class="input-group spinner">
-                                            <input type="number" class="form-control text-center" name="epochInput" #epochInput="ngModel"
-                                                (change)="checkEpochChange()" [(ngModel)]="trainingData.epoch" required>
+                                            <input type="number" class="form-control text-center" name="epochInput"
+                                                #epochInput="ngModel" (change)="checkEpochChange()"
+                                                [(ngModel)]="trainingData.epoch" required>
                                             <div class="input-group-append">
                                                 <div class="input-group-text cursor-p" (click)="onEpochUp()"><i
                                                         class="zmdi zmdi-chevron-up"></i></div>
@@ -82,7 +83,8 @@
                                             </div>
                                         </div>
                                         <div *ngIf="epochInput.touched">
-                                            <p *ngIf="epochInput.errors?.required" class="red small">It is a required field</p>
+                                            <p *ngIf="epochInput.errors?.required" class="red small">It is a required
+                                                field</p>
                                         </div>
                                     </div>
                                     <div class="col">
@@ -102,7 +104,8 @@
                                             </div>
                                         </div>
                                         <div *ngIf="learningRateInput.touched">
-                                            <p *ngIf="learningRateInput.errors?.required" class="red small">It is a required field</p>
+                                            <p *ngIf="learningRateInput.errors?.required" class="red small">It is a
+                                                required field</p>
                                         </div>
                                     </div>
 
@@ -164,8 +167,21 @@
                                             </select>
                                         </div>
                                     </div>
+                                    <div class="col-6">
+                                        <label for="output_coulmn">Output</label>
+                                        <div class="input-group spinner">
+                                            <select class="form-control show-tick ms" style="padding: 9px;"
+                                                name="output_coulmn" [(ngModel)]="trainingData.output_coulmn">
+                                                <option>Select Column</option>
+                                                <option *ngFor="let item of columns" value="{{item}}">
+                                                    {{item}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
                                 </div>
                                 <br>
+
                                 <div class="header">
                                     <h2><strong>Split the Dataset</strong></h2>
                                 </div>
@@ -181,13 +197,23 @@
                                         trainingData.validation_split}}%) </label>
                                 </div>
                                 <div class="col text-center">
-                                    <button class="btn btn-primary" (click)="generateModel()"
-                                        [disabled]="layerModel.length == 0">Generate Model</button>
+                                    <a href="#trainingdiv">Hell</a>
+                                    <a href="#trainingdiv"><button class="btn btn-primary" (click)="generateModel()"
+                                            [disabled]="layerModel.length == 0 || trainingData.output_coulmn == 'Select Column'">Generate
+                                            Model</button></a>
                                     <button class="btn btn-success" (click)="saveHyperparameters()" data-toggle="modal"
                                         data-target="#success-dialog">Save changes</button>
                                 </div>
                             </form>
                         </div>
+                    </div>
+                    <!-- <pre><code [innerHtml]="code" class="language-python"></code></pre>
+                    <textarea>{{traininglogs}}</textarea> -->
+                    <div id="trainingdiv" class="card">
+                        <div class="header">
+                            <h2><strong>TRAININING</strong></h2>
+                        </div>
+                        <pre class="body" [innerHTML]="traininglogs"></pre>
                     </div>
                 </div>
             </div>
