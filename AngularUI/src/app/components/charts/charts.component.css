@@ -81,6 +81,35 @@ section.content{
     margin: 5px;
 }
 
+.style_active{
+    display: block;
+    transition: all 300ms ease 0s;
+    color: #888;
+    margin: 0;
+    margin-right: 5px;
+    background-color: rgba(0,0,0,0);
+    border: 1px solid #e47297;
+    color: #e47297;
+    border-radius: 30px;
+    font-size: 12px;
+    padding: 8px 23px;
+    line-height: 1.5;
+}
+
+.style{
+    display: block;
+    transition: all 300ms ease 0s;
+    color: #888;
+    margin: 0;
+    margin-right: 5px;
+    background-color: rgba(0,0,0,0);
+    border: 1px solid #888;
+    border-radius: 30px;
+    font-size: 12px;
+    padding: 8px 23px;
+    line-height: 1.5;
+}
+
 /* .active {
     color: #4285f4;
 } */

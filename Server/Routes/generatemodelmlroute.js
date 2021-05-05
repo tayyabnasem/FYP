@@ -1,11 +1,12 @@
 const router = require('express').Router();
 
 const { spawn } = require('child_process');
+const { cwd } = require('process');
 
 router.post('/', function (req, res) {
 	var data = req.body
 	console.log(data)
-	const python = spawn('python', ['Python Scripts/createmodel.py'])
+	const python = spawn('python', ['Python Scripts/createmodelml.py'])
 	python.stdin.write(req.session.preprocessed_data_path + '\n')
 	python.stdin.write(JSON.stringify(data))
 	python.stdin.end()
@@ -13,8 +14,8 @@ router.post('/', function (req, res) {
 	var parsedData = "";
 	python.stdout.on('data', function (data) {
 		parsedData = data.toString()
-		console.log("Data printed", data)
-		//req.io.emit('logs', data)
+		console.log("Data printed", parsedData)
+		//req.io.emit('logs', parsedData)
 	})
 
 	python.stderr.on('data', function (data) {
@@ -37,9 +38,8 @@ router.post('/', function (req, res) {
 		})
 
 		python1.stderr.on('data', (data) =>{
-			//console.log("Error: ",data.toString())
 			data = data.toString()
-			//data = data.split('\n')
+			console.log("Error:", data)
 			req.io.emit('logs', data)
 		})
 	})

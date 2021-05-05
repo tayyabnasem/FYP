@@ -24,6 +24,8 @@ import { ModelComponent } from './components/model/model.component';
 import { SortableModule } from '@progress/kendo-angular-sortable';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NavbarComponent } from './components/navbar/navbar.component';
+import { ModelDLComponent } from './components/model-dl/model-dl.component';
+import { ModelMLComponent } from './components/model-ml/model-ml.component';
 
 
 
@@ -42,6 +44,8 @@ import { NavbarComponent } from './components/navbar/navbar.component';
         ProfileComponent,
         ModelComponent,
         NavbarComponent,
+        ModelDLComponent,
+        ModelMLComponent,
     ],
     imports: [
         BrowserModule,

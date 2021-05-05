@@ -6,11 +6,11 @@ const MongoClient = require('mongodb').MongoClient;
 const ObjectId = require('mongodb').ObjectId
 
 const url = "mongodb://localhost:27017/";
-const DIR = './Uploads/uploads';
+const DIR = './Uploads/project_';
 
 const storage = multer.diskStorage({
 	destination: (req, file, cb) => {
-		let dir = DIR + req.session.email
+		let dir = DIR + req.query.project
 		if (!fs.existsSync(dir)) {
 			fs.mkdirSync(dir);
 		}
@@ -57,16 +57,29 @@ router.post('/', function (req, res) {
 			if (data_error) {
 				res.send({ error: data_error, data: [] })
 			} else {
-				dataToSend = JSON.parse(parsedData)
-				console.log(dataToSend)
+				// dataToSend = JSON.parse(parsedData)
+				// console.log(dataToSend)
 				MongoClient.connect(url, { useUnifiedTopology: true }, function (err, client) {
 					if (err) {
 						res.send({ text: "None", error: err })
 					} else {
+						model = {}
 						dataToSend = JSON.parse(parsedData)
+						for (let i = 0; i < dataToSend.length; i++) {
+							model[dataToSend[i].name] = {
+								include: true,
+								impute_int_with: 'mean',
+								impute_str_with: 'Blank',
+								type: this.dataToSend[i].type,
+								replacevalue: "",
+								replacewith: ""
+							}
+						};
+						preprocessing_options = { over_all_dataset_options: {drop_rows: true}, column_wise_options: model }
 						var database = client.db("FYP")
 						const query = { _id: new ObjectId(projectID) }
-						const options = { $set: { dataset_path: filePath, data_statistics: dataToSend } }
+						const options = { $set: { dataset_path: filePath, data_statistics: dataToSend, preprocessed_dataset_path: '',
+						preprocessing_options: preprocessing_options} }
 						database.collection("Projects").updateOne(query, options, (err, result) => {
 							client.close()
 							//console.log(result)

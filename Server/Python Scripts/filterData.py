@@ -1,4 +1,3 @@
-from sklearn import preprocessing
 import pandas as pd
 import sys, json
 
@@ -32,9 +31,9 @@ else:
         else:
             df[column].fillna(data[column]['impute_str_with'], inplace=True)
 
-for column in data:
-    if data[column]['type'] == "String":
-        df[column] = preprocessing.LabelEncoder().fit_transform(df[column])
+# for column in data:
+#     if data[column]['type'] == "String":
+#         df[column] = preprocessing.LabelEncoder().fit_transform(df[column])
 
 df.to_csv(filepath.split('.csv')[0]+'_preprocessed.csv', mode='w', index=False)
 print(filepath.split('.csv')[0]+'_preprocessed.csv')

@@ -1,0 +1,268 @@
+<app-navbar></app-navbar>
+
+<section class="content">
+    <div class="body">
+
+        <!-- Nav tabs -->
+        <ul class=" clr nav nav-tabs p-0 mb-3">
+            <li class="nav-item"><a class="style" data-toggle="tab" routerLink="/description"
+                    queryParamsHandling="preserve" routerLinkActive="active"><strong>Description</strong></a></li>
+            <li class="nav-item"><a class="style" data-toggle="tab" routerLink="/preprocess"
+                    queryParamsHandling="preserve" routerLinkActive="active"><strong>Pre Processing</strong></a></li>
+            <li class="nav-item"><a class="style" data-toggle="tab" routerLink="/visualize"
+                    queryParamsHandling="preserve" routerLinkActive="active"><strong>Visualization</strong></a></li>
+            <li class="nav-item"><a class="style_active" data-toggle="tab" routerLink="/model"
+                    queryParamsHandling="preserve" routerLinkActive="active"><strong>Model</strong></a></li>
+        </ul>
+
+    </div>
+    <div class="body_scroll">
+        <div class="block-header">
+            <div class="row">
+                <div class="col-lg-7 col-md-6 col-sm-12">
+                    <h2>Model</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-fluid">
+            <!-- Vertical Layout -->
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2><strong>Algorithm</strong></h2>
+                        </div>
+                        <div class="body">
+                            <div class="row col-6">
+                                <div style="cursor: pointer" [ngClass]="{'active': model.algo_type == 'Classification'}"
+                                    class="col border-d active">
+                                    <p (click)="onClassify()">Classification</p>
+                                </div>
+                                <div style="cursor: pointer" [ngClass]="{'active': model.algo_type == 'Regression'}"
+                                    class="col border-d">
+                                    <p (click)="onRegress()">Regression</p>
+                                </div>
+                                <div style="cursor: pointer" [ngClass]="{'active': model.algo_type == 'Clustering'}"
+                                    class="col border-d">
+                                    <p (click)="onCluster()">Clustering</p>
+                                </div>
+                            </div>
+                            <br>
+                            <div *ngIf="model.algo_type == 'Classification'" class="col">
+                                <label for=""> Classification Algorithim</label>
+                                <div class="clearfix">
+                                    <select [(ngModel)]="model.algorithm" class="form-control show-tick ms"
+                                        style="padding: 9px;">
+                                        <option>Gaussian Naive Bayes</option>
+                                        <option>Categorical Naive Bayes</option>
+                                        <option>Multinomial Naive Bayes</option>
+                                        <option>Bernoulli Naive Bayes</option>
+                                        <option>Decision Tree Classifier</option>
+                                        <option>Random Forest</option>
+                                    </select>
+                                </div>
+                                <br>
+                                <div *ngIf="model.algorithm == 'Decision Tree Classifier'" class="row">
+                                    <div class="col">
+                                        <label for="">Criterion</label>
+                                        <div class="clearfix">
+                                            <select class="form-control show-tick ms" style="padding: 9px;"
+                                                [(ngModel)]="decision_tree_classifier_params.criterion">
+                                                <option>Gini</option>
+                                                <option>Entropy</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div *ngIf="model.algorithm == 'Random Forest'" class="row">
+                                    <div class="col">
+                                        <label for="">Number of trees</label>
+                                        <input type="number" class="form-control text-center" name="number"
+                                            [(ngModel)]="random_forest_classifier_params.trees">
+                                    </div>
+                                    <div class="col">
+                                        <label for="">Criterion</label>
+                                        <div class="clearfix">
+                                            <select class="form-control show-tick ms" style="padding: 9px;"
+                                                [(ngModel)]="random_forest_classifier_params.criterion">
+                                                <option>Gini</option>
+                                                <option>Entropy</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <br>
+
+                            <div *ngIf="model.algo_type == 'Regression'" class="col">
+                                <label for=""> Regression Algorithm</label>
+                                <div class="clearfix">
+                                    <select [(ngModel)]="model.algorithm" class="form-control show-tick ms"
+                                        style="padding: 9px;">
+                                        <option>Linear Regression</option>
+                                        <option>Logistic Regression</option>
+                                        <option>Decision Tree Regressor</option>
+                                        <option>Random Forest</option>
+                                    </select>
+                                </div>
+                                <br>
+                                <div *ngIf="model.algorithm == 'Random Forest'" class="row">
+                                    <div class="col">
+                                        <label for="">Number of trees</label>
+                                        <input type="number" class="form-control text-center" name="number">
+                                    </div>
+                                    <div class="col">
+                                        <label for="">Criterion</label>
+                                        <div class="clearfix">
+                                            <select class="form-control show-tick ms" style="padding: 9px;">
+                                                <option>Mean Squared Error</option>
+                                                <option>Mean Absolute Error</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div *ngIf="model.algorithm == 'Linear Regression'" class="row">
+                                    <div class="col">
+                                        <label for="">Normalize</label>
+                                        <div class="clearfix">
+                                            <select class="form-control show-tick ms" style="padding: 9px;">
+                                                <option>True</option>
+                                                <option>False</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div *ngIf="model.algorithm == 'Logistic Regression'" class="row">
+                                    <div class="col">
+                                        <label for="">Penalty</label>
+                                        <div class="clearfix">
+                                            <select class="form-control show-tick ms" style="padding: 9px;">
+                                                <option>L2</option>
+                                                <option>L1</option>
+                                                <option>Elisticnet</option>
+                                                <option>None</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <label for="">Maximum Iterations</label>
+                                        <div class="clearfix">
+                                            <input type="number" class="form-control text-center" name="number">
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div *ngIf="model.algorithm == 'Decision Tree Regressor'" class="row">
+                                    <div class="col">
+                                        <label for="">Criterion</label>
+                                        <div class="clearfix">
+                                            <select class="form-control show-tick ms" style="padding: 9px;">
+                                                <option>Gini</option>
+                                                <option>Entropy</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div *ngIf="model.algo_type == 'Clustering'" class="col">
+                                <label for=""> Clustering Algorithim</label>
+                                <div class="clearfix">
+                                    <select [(ngModel)]="model.algorithm" class="form-control show-tick ms"
+                                        style="padding: 9px;">
+                                        <option>K-means</option>
+                                        <option>Hierarchical Clustering</option>
+                                    </select>
+                                </div>
+                                <br>
+                                <div *ngIf="model.algorithm == 'K-means'">
+                                    <div class="row">
+                                        <div class="col">
+                                            <label for="">Number of Clustres</label>
+                                            <div class="clearfix">
+                                                <input type="number" class="form-control text-center" name="number">
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <label for="">Algorithim</label>
+                                            <div class="clearfix">
+                                                <select class="form-control show-tick ms" style="padding: 9px;">
+                                                    <option>Auto</option>
+                                                    <option>Full</option>
+                                                    <option>Elkan</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <label for="">Maximum Iterations</label>
+                                            <div class="clearfix">
+                                                <input type="number" class="form-control text-center" name="number">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div *ngIf="model.algorithm == 'Hierarchical Clustering'">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="header">
+                            <h2><strong>Utilities</strong></h2>
+                        </div>
+                        <div class="body">
+                            <div class="row">
+                                <div class="col-6">
+                                    <label for="output_coulmn">Output</label>
+                                    <div class="input-group spinner">
+                                        <select class="form-control show-tick ms" style="padding: 9px;"
+                                            name="output_coulmn" [(ngModel)]="utilities.output_coulmn">
+                                            <option>Select Column</option>
+                                            <option *ngFor="let item of columns" value="{{item}}">
+                                                {{item}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col">
+                                    <label for="">Split Dataset</label>
+                                    <div class="row">
+                                        <label for="customRange1" class="sp form-label">Training
+                                            ({{utilities.validation_split}}%)</label>
+                                        <div>
+                                            <input style="width: 700px;" type="range" name="validationSplit"
+                                                [(ngModel)]="utilities.validation_split" class="form-range"
+                                                id="customRange1">
+                                        </div>
+                                        <label for="customRange1" class="sp form-label">Testing ({{100 -
+                                            utilities.validation_split}}%) </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col text-center">
+                                <button class="btn btn-primary" (click)="train()"
+                                    [disabled]="utilities.output_coulmn == 'Select Column'">Train</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="trainingdiv" class="card">
+                        <div class="header">
+                            <h2><strong>TRAINING</strong></h2>
+                        </div>
+                        <pre style="height: 400px; overflow-y: auto;" class="body" [innerHTML]="traininglogs"></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

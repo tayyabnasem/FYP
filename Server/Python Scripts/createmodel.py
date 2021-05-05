@@ -36,16 +36,23 @@ lines = ["from tensorflow import keras",
 
 for layer in model_layers:
     if layer['layerName'] == 'Dense':
-        lines.append(create_dense_layer(layer['Dense']['units'], layer['Dense']['activationFunction'].lower()))
+        lines.append(create_dense_layer(layer['units'], layer['activationFunction'].lower()))
     elif layer['layerName'] == 'Dropout':
-        lines.append(create_dropout_layer(layer['Dropout']['dropoutRate']))
+        lines.append(create_dropout_layer(layer['dropoutRate']))
 
 lines.append("")
 lines.append(f"opt = optimizers.{hyperparameters['optimizer']}(learning_rate={hyperparameters['learningRate']})") 
 lines.append(f"loss = losses.{hyperparameters['lossFunction'].replace(' ', '')}()")
 lines.append(f"model.compile(loss = loss, optimizer = opt, metrics = ['accuracy'])")
+# lines.append(f"try:")
 lines.append(f"model.fit(X_train, y_train, batch_size={hyperparameters['batchSize']}, epochs={hyperparameters['epoch']})")
+# lines.append(f"except:")
+# lines.append("\tprint()")
 
+temp_path = filepath.split('\\')[:-1]
+temp_path.append('model.py')
+file_name = '/'.join(temp_path)
+print(file_name)
 
-with open('temp.py', 'w') as file:
+with open(file_name, 'w') as file:
     file.write("\n".join(lines))

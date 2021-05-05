@@ -19,15 +19,19 @@ router.get('/', (req, res) => {
                     client.close()
                     if (result) {
                         sess.preprocessed_data_path = result.preprocessed_dataset_path
-                        columns = []
-                        console.log(result)
-                        for (let i = 0; i < result.data_statistics.length; i++) {
-                            if (result.preprocessing_options.column_wise_options[result.data_statistics[i].name].include) {
-                                columns.push(result.data_statistics[i].name)
+                        console.log("Columns Data: ",result)
+                        // console.log(result.preprocessed_data_path)
+                        if (result.preprocessed_dataset_path == '') {
+                            res.send({error: "Preprocess", columns : []})
+                        } else {
+                            columns = []
+                            for (let i = 0; i < result.data_statistics.length; i++) {
+                                if (result.preprocessing_options.column_wise_options[result.data_statistics[i].name].include) {
+                                    columns.push(result.data_statistics[i].name)
+                                }
                             }
-
+                            res.send({ error: "None", columns: columns })
                         }
-                        res.send({ error: "None", columns: columns })
                     } else {
                         res.send({ error: "Project Not Found", data: [] })
                     }
