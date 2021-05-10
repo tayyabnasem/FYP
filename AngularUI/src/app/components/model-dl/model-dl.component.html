@@ -181,7 +181,21 @@
                                     </div>
                                 </div>
                                 <br>
-
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label for="optimizer">Categorize Output</label>
+                                        <!-- <i style="cursor: pointer;" data-toggle="modal" data-target="#optimizer"
+                                            class=" quest fa fa-question-circle" aria-hidden="true"></i> -->
+                                        <div class="input-group spinner">
+                                            <select class="form-control show-tick ms" style="padding: 9px;"
+                                                name="categorize_output" [(ngModel)]="trainingData.categorize_output">
+                                                <option>Yes</option>
+                                                <option>No</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
                                 <div class="header">
                                     <h2><strong>Split the Dataset</strong></h2>
                                 </div>
@@ -191,15 +205,14 @@
                                     <div>
                                         <input style="width: 700px;" type="range" name="validationSplit"
                                             [(ngModel)]="trainingData.validation_split" class="form-range"
-                                            id="customRange1">
+                                            (change)="checkSplitRatio()" id="customRange1">
                                     </div>
                                     <label for="customRange1" class="sp form-label">Testing ({{100 -
                                         trainingData.validation_split}}%) </label>
                                 </div>
                                 <div class="col text-center">
                                     <button class="btn btn-primary" (click)="generateModel()"
-                                        [disabled]="layerModel.length == 0 || trainingData.output_coulmn == 'Select Column'">Generate
-                                        Model</button>
+                                        [disabled]="layerModel.length == 0 || trainingData.output_coulmn == 'Select Column'">Train</button>
                                     <button class="btn btn-success" (click)="saveHyperparameters()" data-toggle="modal"
                                         data-target="#success-dialog">Save changes</button>
                                 </div>
@@ -208,11 +221,33 @@
                     </div>
                     <!-- <pre><code [innerHtml]="code" class="language-python"></code></pre>
                     <textarea>{{traininglogs}}</textarea> -->
-                    <div *ngIf="traininglogs" id="trainingdiv" class="card">
+                    <div id="trainingdiv" class="card">
                         <div class="header">
                             <h2><strong>TRAINING</strong></h2>
                         </div>
                         <pre style="height: 400px; overflow-y: auto;" class="body" [innerHTML]="traininglogs"></pre>
+                    </div>
+                    <div *ngIf="trainingComplete" class="card">
+                    <!-- <div class="card"> -->
+                        <div class="header">
+                            <h2><strong>Results</strong></h2>
+                        </div>
+                        <div class="body">
+                            <div class="row">
+                                <div class="col-6" style="border-right: 1px dotted" *ngIf="accuracy_image">
+                                    <label for="">Accuracy per Epoch</label>
+                                    <img src="{{accuracy_image}}" />
+                                </div>
+                                <div class="col-6" *ngIf="loss_image">
+                                    <label for="">Loss per Epoch</label>
+                                    <img src="{{loss_image}}" />
+                                </div>
+                            </div>
+                            <div class="col text-center">
+                                <button class="btn btn-success" data-toggle="modal" data-target="#exportModel"
+                                    aria-hidden="true" (click)="switchExportMethod()">Export Model</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -472,7 +507,8 @@
                                 <label for="">Activation Function</label>
                                 <div class="clearfix">
                                     <select class="form-control show-tick ms" style="padding: 9px;"
-                                        name="activationFunctionLSTM" [(ngModel)]="newLayerData.LSTM.activationFunction">
+                                        name="activationFunctionLSTM"
+                                        [(ngModel)]="newLayerData.LSTM.activationFunction">
                                         <option>Default</option>
                                         <option>Relu</option>
                                         <option>Sigmoid</option>
@@ -492,7 +528,8 @@
                                 <label for=""> Recurrent Activation Function</label>
                                 <div class="clearfix">
                                     <select class="form-control show-tick ms" style="padding: 9px;"
-                                        name="reccActivationFunctionLSTM" [(ngModel)]="newLayerData.LSTM.recurrentActivation">
+                                        name="reccActivationFunctionLSTM"
+                                        [(ngModel)]="newLayerData.LSTM.recurrentActivation">
                                         <option>Default</option>
                                         <option>Relu</option>
                                         <option>Sigmoid</option>
@@ -555,6 +592,37 @@
                 the number, the better your model will learn to predict the data.
                 <br> You probably want to tweak (usually increase) this number until you get good predictive results
                 with your model.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary waves-effect" data-dismiss="modal">CLOSE</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="exportModel" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="title">Export Model</h4>
+            </div>
+            <div class="tsize modal-body">
+                <div class="row col-6">
+                    <div style="cursor: pointer" [ngClass]="{'active_exp': export_code}" class="col border-d active_exp"
+                        (click)="switchExportMethod()">Code
+                    </div>
+                    <div style="cursor: pointer" [ngClass]="{'active_exp': !export_code}" class="col border-d"
+                        (click)="switchExportMethodtoModel()">
+                        Trained Model
+                    </div>
+                </div>
+                <br>
+                <div class="row col" *ngIf="export_code">
+                    <pre><code [innerHtml]="code" class="language-python"></code></pre>
+                </div>
+                <div class="row col" *ngIf="!export_code">
+                    Downloading file
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary waves-effect" data-dismiss="modal">CLOSE</button>

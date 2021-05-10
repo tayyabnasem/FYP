@@ -55,15 +55,15 @@
                                     <select [(ngModel)]="model.algorithm" class="form-control show-tick ms"
                                         style="padding: 9px;">
                                         <option>Gaussian Naive Bayes</option>
-                                        <option>Categorical Naive Bayes</option>
                                         <option>Multinomial Naive Bayes</option>
                                         <option>Bernoulli Naive Bayes</option>
                                         <option>Decision Tree Classifier</option>
                                         <option>Random Forest</option>
+                                        <option>Logistic Regression</option>
                                     </select>
                                 </div>
                                 <br>
-                                <div *ngIf="model.algorithm == 'Decision Tree Classifier'" class="row">
+                                <div *ngIf="model.algorithm == 'Decision Tree Classifier'" class="row col">
                                     <div class="col">
                                         <label for="">Criterion</label>
                                         <div class="clearfix">
@@ -74,8 +74,18 @@
                                             </select>
                                         </div>
                                     </div>
+                                    <div class="col">
+                                        <label for="">Splitter</label>
+                                        <div class="clearfix">
+                                            <select class="form-control show-tick ms" style="padding: 9px;"
+                                                [(ngModel)]="decision_tree_classifier_params.splitter">
+                                                <option>Best</option>
+                                                <option>Random</option>
+                                            </select>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div *ngIf="model.algorithm == 'Random Forest'" class="row">
+                                <div *ngIf="model.algorithm == 'Random Forest'" class="row col">
                                     <div class="col">
                                         <label for="">Number of trees</label>
                                         <input type="number" class="form-control text-center" name="number"
@@ -91,10 +101,59 @@
                                             </select>
                                         </div>
                                     </div>
-
+                                </div>
+                                <div *ngIf="model.algorithm == 'Logistic Regression'" class="col">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <label for="">Penalty</label>
+                                            <div class="clearfix">
+                                                <select class="form-control show-tick ms" style="padding: 9px;"
+                                                    [(ngModel)]="logistic_regression_params.penalty">
+                                                    <option>L2</option>
+                                                    <option>L1</option>
+                                                    <option>Elasticnet</option>
+                                                    <option>None</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <label for="">Maximum Iterations</label>
+                                            <div class="clearfix">
+                                                <input type="number" class="form-control text-center"
+                                                    [(ngModel)]="logistic_regression_params.max_iter"
+                                                    (change)="checkMaxIterationsLogReg()">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <label for="">Multi Class</label>
+                                            <div class="clearfix">
+                                                <select class="form-control show-tick ms" style="padding: 9px;"
+                                                    [(ngModel)]="logistic_regression_params.multi_class">
+                                                    <option>Auto</option>
+                                                    <option>Ovr</option>
+                                                    <option>Multinomial</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <label for="">Solver</label>
+                                            <div class="clearfix">
+                                                <select class="form-control show-tick ms" style="padding: 9px;"
+                                                    [(ngModel)]="logistic_regression_params.solver">
+                                                    <option>LBFGS</option>
+                                                    <option>Newton-cg</option>
+                                                    <option>Liblinear</option>
+                                                    <option>SAG</option>
+                                                    <option>SAGA</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <br>
 
                             <div *ngIf="model.algo_type == 'Regression'" class="col">
                                 <label for=""> Regression Algorithm</label>
@@ -102,18 +161,17 @@
                                     <select [(ngModel)]="model.algorithm" class="form-control show-tick ms"
                                         style="padding: 9px;">
                                         <option>Linear Regression</option>
-                                        <option>Logistic Regression</option>
                                         <option>Decision Tree Regressor</option>
                                         <option>Random Forest</option>
                                     </select>
                                 </div>
                                 <br>
-                                <div *ngIf="model.algorithm == 'Random Forest'" class="row">
-                                    <div class="col">
+                                <div *ngIf="model.algorithm == 'Random Forest'" class="row col">
+                                    <div class="col-6">
                                         <label for="">Number of trees</label>
                                         <input type="number" class="form-control text-center" name="number">
                                     </div>
-                                    <div class="col">
+                                    <div class="col-6">
                                         <label for="">Criterion</label>
                                         <div class="clearfix">
                                             <select class="form-control show-tick ms" style="padding: 9px;">
@@ -123,44 +181,46 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div *ngIf="model.algorithm == 'Linear Regression'" class="row">
-                                    <div class="col">
+                                <div *ngIf="model.algorithm == 'Linear Regression'" class="row col">
+                                    <div class="col-6">
                                         <label for="">Normalize</label>
                                         <div class="clearfix">
-                                            <select class="form-control show-tick ms" style="padding: 9px;">
+                                            <select class="form-control show-tick ms" style="padding: 9px;"
+                                                [(ngModel)]="linear_regression_params.normalize">
+                                                <option>False</option>
+                                                <option>True</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="">Fit Intercept</label>
+                                        <div class="clearfix">
+                                            <select class="form-control show-tick ms" style="padding: 9px;"
+                                                [(ngModel)]="linear_regression_params.fit_intercept">
                                                 <option>True</option>
                                                 <option>False</option>
                                             </select>
                                         </div>
                                     </div>
                                 </div>
-                                <div *ngIf="model.algorithm == 'Logistic Regression'" class="row">
-                                    <div class="col">
-                                        <label for="">Penalty</label>
+                                <div *ngIf="model.algorithm == 'Decision Tree Regressor'" class="row col">
+                                    <div class="col-6">
+                                        <label for="">Criterion</label>
                                         <div class="clearfix">
-                                            <select class="form-control show-tick ms" style="padding: 9px;">
-                                                <option>L2</option>
-                                                <option>L1</option>
-                                                <option>Elisticnet</option>
-                                                <option>None</option>
+                                            <select class="form-control show-tick ms" style="padding: 9px;"
+                                                [(ngModel)]="decision_tree_regressor_params.criterion">
+                                                <option>Gini</option>
+                                                <option>Entropy</option>
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col">
-                                        <label for="">Maximum Iterations</label>
+                                    <div class="col-6">
+                                        <label for="">Splitter</label>
                                         <div class="clearfix">
-                                            <input type="number" class="form-control text-center" name="number">
-
-                                        </div>
-                                    </div>
-                                </div>
-                                <div *ngIf="model.algorithm == 'Decision Tree Regressor'" class="row">
-                                    <div class="col">
-                                        <label for="">Criterion</label>
-                                        <div class="clearfix">
-                                            <select class="form-control show-tick ms" style="padding: 9px;">
-                                                <option>Gini</option>
-                                                <option>Entropy</option>
+                                            <select class="form-control show-tick ms" style="padding: 9px;"
+                                                [(ngModel)]="decision_tree_regressor_params.splitter">
+                                                <option>Best</option>
+                                                <option>Random</option>
                                             </select>
                                         </div>
                                     </div>
@@ -178,18 +238,40 @@
                                     </select>
                                 </div>
                                 <br>
-                                <div *ngIf="model.algorithm == 'K-means'">
+                                <div *ngIf="model.algorithm == 'K-means'" class="col">
                                     <div class="row">
-                                        <div class="col">
+                                        <div class="col-6">
                                             <label for="">Number of Clustres</label>
                                             <div class="clearfix">
-                                                <input type="number" class="form-control text-center" name="number">
+                                                <input type="number" class="form-control text-center"
+                                                    [(ngModel)]="k_means_clustering_params.clusters">
                                             </div>
                                         </div>
-                                        <div class="col">
-                                            <label for="">Algorithim</label>
+                                        <div class="col-6">
+                                            <label for="">Initial Points</label>
                                             <div class="clearfix">
-                                                <select class="form-control show-tick ms" style="padding: 9px;">
+                                                <select class="form-control show-tick ms" style="padding: 9px;"
+                                                    [(ngModel)]="k_means_clustering_params.initial_points">
+                                                    <option>Random</option>
+                                                    <option>K-means++</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <label for="">Maximum Iterations</label>
+                                            <div class="clearfix">
+                                                <input type="number" class="form-control text-center"
+                                                    [(ngModel)]="k_means_clustering_params.max_iter">
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <label for="">Algorithm</label>
+                                            <div class="clearfix">
+                                                <select class="form-control show-tick ms" style="padding: 9px;"
+                                                    [(ngModel)]="k_means_clustering_params.algorithm">
                                                     <option>Auto</option>
                                                     <option>Full</option>
                                                     <option>Elkan</option>
@@ -197,14 +279,11 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row">
-                                        <div class="col">
-                                            <label for="">Maximum Iterations</label>
-                                            <div class="clearfix">
-                                                <input type="number" class="form-control text-center" name="number">
-                                            </div>
-                                        </div>
+                                    <br>
+                                    <div class="col text-center">
+                                        <button class="btn btn-primary" (click)="train()">Train</button>
                                     </div>
+
                                 </div>
                                 <div *ngIf="model.algorithm == 'Hierarchical Clustering'">
 
@@ -212,7 +291,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card">
+                    <div *ngIf="model.algorithm != 'K-means'" class="card">
                         <div class="header">
                             <h2><strong>Utilities</strong></h2>
                         </div>
@@ -241,7 +320,7 @@
                                         <div>
                                             <input style="width: 700px;" type="range" name="validationSplit"
                                                 [(ngModel)]="utilities.validation_split" class="form-range"
-                                                id="customRange1">
+                                                (change)="checkSplitRatio()" id="customRange1">
                                         </div>
                                         <label for="customRange1" class="sp form-label">Testing ({{100 -
                                             utilities.validation_split}}%) </label>

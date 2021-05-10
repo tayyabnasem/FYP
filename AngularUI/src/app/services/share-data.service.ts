@@ -5,15 +5,15 @@ import { Injectable } from '@angular/core';
 })
 export class ShareDataService {
 
-  private data: any = undefined
+  private code: any = undefined
   
   constructor() { }
 
-  setData(data: any) {
-    this.data = data;
+  setCode(data: any) {
+    this.code = data;
   }
 
-  getData(): any {
-    return this.data;
+  getCode(): any {
+    return this.code;
   }
 }

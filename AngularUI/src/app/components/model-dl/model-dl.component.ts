@@ -4,6 +4,7 @@ import { ApicallService } from 'src/app/services/apicall.service';
 import * as Prism from 'prismjs'
 import { io } from 'socket.io-client';
 import 'prismjs/components/prism-python'
+import { ShareDataService } from 'src/app/services/share-data.service';
 
 @Component({
 	selector: 'app-model-dl',
@@ -48,17 +49,23 @@ export class ModelDLComponent implements OnInit {
 		batchSize: 16,
 		optimizer: "Adam",
 		validation_split: 70,
-		output_coulmn: "Select Column"
+		output_coulmn: "Select Column",
+		categorize_output: "Yes"
 	}
+	trainingComplete: Boolean = false
 	selectedLayerIndex: number = 0
 	layerModel: any[] = []
 	columns: any[] = []
 	project_id: any
 	code: any = "[i for i in range(10)]"
 	traininglogs: any = ""
+	accuracy_image: any = ""
+	loss_image: any = ""
+	export_code: Boolean = true
 
 
-	constructor(private apiCall: ApicallService, private route: ActivatedRoute) {
+	constructor(private apiCall: ApicallService, private route: ActivatedRoute, private sharedData: ShareDataService) {
+		sharedData = new ShareDataService()
 		this.socket = io('http://localhost:3000');
 	}
 
@@ -79,7 +86,21 @@ export class ModelDLComponent implements OnInit {
 			})
 		});
 		this.socket.on('logs', (data: any) => {
+			if (data == "Training Complete...") {
+				this.trainingComplete = true
+			}
 			this.traininglogs += data + "<br>"
+		});
+
+		this.socket.on('model_accuracy', (data: any) => {
+			this.accuracy_image = 'http://localhost:3000/' + data
+			console.log("Accuracy Image", JSON.stringify(this.accuracy_image))
+		});
+
+
+		this.socket.on('model_loss', (data: any) => {
+			this.loss_image = 'http://localhost:3000/' + data
+			console.log("Loss Image", JSON.stringify(this.loss_image))
 		});
 		this.code = Prism.highlight(this.code, Prism.languages['python'])
 	}
@@ -147,6 +168,11 @@ export class ModelDLComponent implements OnInit {
 		this.trainingData.epoch < 1 ? this.trainingData.epoch = 1 : this.trainingData.epoch;
 	}
 
+	checkSplitRatio() {
+		this.trainingData.validation_split < 50 ? this.trainingData.validation_split = 50 : this.trainingData.validation_split
+		this.trainingData.validation_split > 90 ? this.trainingData.validation_split = 90 : this.trainingData.validation_split
+	}
+
 	addLayer() {
 		var temp: any = { layerName: this.newLayerData.layerName }
 		for (var prop in this.newLayerData[this.newLayerData.layerName]) {
@@ -179,6 +205,22 @@ export class ModelDLComponent implements OnInit {
 		this.selectedLayerData = item
 	}
 
+	switchExportMethod() {
+		this.export_code = true
+		this.code = this.sharedData.getCode()
+		if (!this.code) {
+			let url = "http://localhost:3000/getModelCode?project=" + this.project_id
+			this.apiCall.getData(url).subscribe((response: any) => {
+				this.code = Prism.highlight(response.data, Prism.languages['python'])
+				this.sharedData.setCode(this.code)
+			})
+		}
+	}
+
+	switchExportMethodtoModel() {
+		this.export_code = false
+	}
+
 	saveModel() {
 		let url = "http://localhost:3000/saveModel?project=" + this.project_id
 		this.apiCall.postData(url, this.layerModel).subscribe((response) => {
@@ -188,12 +230,20 @@ export class ModelDLComponent implements OnInit {
 
 	generateModel() {
 		console.log(this.layerModel)
-		this.traininglogs = ""
+		this.traininglogs = "Starting Training...<br>"
+		this.trainingComplete = false
+		this.accuracy_image = ""
+		this.loss_image = ""
 		let url = "http://localhost:3000/generatemodel?project=" + this.project_id
 		let dataToSend = { layers: this.layerModel, hyperparameters: this.trainingData }
 		this.apiCall.postData(url, dataToSend).subscribe((response) => {
 			console.log(response)
 		})
+	}
+
+	downloadModel() {
+		let url = "http://localhost:3000/downloadModel?project=" + this.project_id
+		window.open(url)
 	}
 
 	saveHyperparameters() {

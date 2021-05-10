@@ -14,6 +14,8 @@ router.post('/', function (req, res) {
 	data['data_statistics'] = []
 	if (data['domain'] == "Deep Learning") {
 		data['model'] = { hyperparameters: {}, layers: [] }
+		data['trained_model'] = ""
+		data['model_file'] = ""
 	} else {
 		data['model'] = { algorithm: "", algo_type: "", parameters: {}}
 	}

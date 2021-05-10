@@ -23,7 +23,7 @@ router.post('/', async function (req, res) {
 					database.collection("Projects").findOneAndUpdate(query, { $set: { preprocessing_options: data } }, (err, result) => {
 						client.close()
 						if (result) {
-							console.log(result)
+							//console.log(result)
 							sess.filePath = result.value.dataset_path
 							console.log('Filepath mongo:', sess.filePath)
 							python.stdin.write(sess.filePath + '\n')

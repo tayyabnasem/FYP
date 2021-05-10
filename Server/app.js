@@ -31,6 +31,8 @@ const saveModelroute = require('./Routes/savemodel')
 const getModelInforoute = require('./Routes/getmodelinforoute')
 const saveHyperparameterroute = require('./Routes/savehyperparametersroute')
 const getProjectDomainroute = require('./Routes/checkprojecttype')
+const downloadModelroute = require('./Routes/downloadtrainedmodelroute')
+const getModelCoderoute = require('./Routes/getmodelcode')
 
 var jsonParser = bodyParser.json()
 
@@ -59,5 +61,7 @@ app.use('/saveModel', saveModelroute)
 app.use('/getModelInfo', getModelInforoute)
 app.use('/saveHyperparameter', saveHyperparameterroute)
 app.use('/getProjectDomain', getProjectDomainroute)
+app.use('/downloadModel', downloadModelroute)
+app.use('/getModelCode', getModelCoderoute)
 
 app.use(express.static(__dirname));

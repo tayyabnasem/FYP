@@ -49,9 +49,19 @@ input::-webkit-inner-spin-button {
     padding-right: 10px;
 }
 
+.active_exp{
+    color: #1967ff;
+    background: white;
+}
+
 .active{
     border: 1px solid #e47297;
     color: #e47297;
+}
+
+.border-d {
+    border-bottom: 2px solid;
+    margin: 5px;
 }
 
 .color{

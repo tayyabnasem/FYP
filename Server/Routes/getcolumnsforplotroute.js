@@ -19,7 +19,7 @@ router.get('/', (req, res) => {
                     client.close()
                     if (result) {
                         sess.preprocessed_data_path = result.preprocessed_dataset_path
-                        console.log("Columns Data: ",result)
+                        //console.log("Columns Data: ",result)
                         // console.log(result.preprocessed_data_path)
                         if (result.preprocessed_dataset_path == '') {
                             res.send({error: "Preprocess", columns : []})
@@ -39,8 +39,6 @@ router.get('/', (req, res) => {
             } catch (Exception) {
                 res.send({ error: "Project Not Found", data: [] })
             }
-
-
         }
     });
 })
