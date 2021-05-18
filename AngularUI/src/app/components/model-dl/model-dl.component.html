@@ -22,6 +22,12 @@
                 <div class="col-lg-7 col-md-6 col-sm-12">
                     <h2>Model</h2>
                 </div>
+                <div class="col-lg-5 col-md-6 col-sm-12">
+                    <button class="btn btn-success float-right" type="button" *ngIf="disable" (click)="onImport()">
+                        <i class="zmdi zmdi-plus"></i>
+                        Import Project
+                    </button>
+                </div>
             </div>
         </div>
         <div class="container-fluid">
@@ -55,8 +61,9 @@
                             <div class="col text-center">
                                 <button class="btn btn-primary" data-toggle="modal" data-target="#newModalLong">New
                                     Layer</button>
-                                <button class="btn btn-success" [disabled]="layerModel.length == 0" data-toggle="modal"
-                                    data-target="#success-dialog" (click)="saveModel()">Save changes</button>
+                                <button class="btn btn-success" [disabled]="layerModel.length == 0 || disable"
+                                    data-toggle="modal" data-target="#success-dialog" (click)="saveModel()">Save
+                                    changes</button>
                             </div>
                         </div>
                     </div>
@@ -214,7 +221,7 @@
                                     <button class="btn btn-primary" (click)="generateModel()"
                                         [disabled]="layerModel.length == 0 || trainingData.output_coulmn == 'Select Column'">Train</button>
                                     <button class="btn btn-success" (click)="saveHyperparameters()" data-toggle="modal"
-                                        data-target="#success-dialog">Save changes</button>
+                                        data-target="#success-dialog" [disabled]="disable">Save changes</button>
                                 </div>
                             </form>
                         </div>
@@ -228,7 +235,7 @@
                         <pre style="height: 400px; overflow-y: auto;" class="body" [innerHTML]="traininglogs"></pre>
                     </div>
                     <div *ngIf="trainingComplete" class="card">
-                    <!-- <div class="card"> -->
+                        <!-- <div class="card"> -->
                         <div class="header">
                             <h2><strong>Results</strong></h2>
                         </div>
@@ -317,20 +324,12 @@
                         </div>
                     </div>
                     <div *ngIf="selectedLayerData.layerName == 'LSTM'">
-                        <div class="row">
+                        <div class="row" style="padding-bottom: 10px;">
                             <div class="col">
                                 <label for="">Units</label>
                                 <div class="input-group spinner">
-                                    <input type="number" class="form-control text-center" name="units"
+                                    <input type="number" class="form-control text-center" name="unitsLSTM"
                                         [(ngModel)]="selectedLayerData.units">
-                                    <div class="input-group-append">
-                                        <!-- <span class="input-group-text col" style="display: grid;"> -->
-                                        <div class="input-group-text cursor-p" (click)="onSpinUpUpdate()"><i
-                                                class="zmdi zmdi-chevron-up"></i></div>
-                                        <div class="input-group-text cursor-p" (click)="onSpinDownUpdate()"><i
-                                                class="zmdi zmdi-chevron-down"></i></div>
-                                        <!-- </span> -->
-                                    </div>
                                 </div>
                             </div>
 
@@ -338,14 +337,14 @@
                                 <label for="">Activation Function</label>
                                 <div class="clearfix">
                                     <select class="form-control show-tick ms" style="padding: 9px;"
-                                        name="activationFunction" [(ngModel)]="selectedLayerData.activationFunction">
-                                        <option>Default</option>
+                                        [(ngModel)]="selectedLayerData.activationFunction"
+                                        name="activationFunctionLSTM">
+                                        <option>Tanh</option>
                                         <option>Relu</option>
                                         <option>Sigmoid</option>
                                         <option>Softmax</option>
                                         <option>Softplus</option>
                                         <option>Softsign</option>
-                                        <option>Tanh</option>
                                         <option>Selu</option>
                                         <option>Elu</option>
                                         <option>Exponential</option>
@@ -353,15 +352,15 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row" style="padding-bottom: 10px;">
                             <div class="col">
                                 <label for=""> Recurrent Activation Function</label>
                                 <div class="clearfix">
                                     <select class="form-control show-tick ms" style="padding: 9px;"
-                                        name="activationFunction" [(ngModel)]="selectedLayerData.recurrentActivation">
-                                        <option>Default</option>
-                                        <option>Relu</option>
+                                        [(ngModel)]="selectedLayerData.recurrentActivation"
+                                        name="reccactivationfuncLSTM">
                                         <option>Sigmoid</option>
+                                        <option>Relu</option>
                                         <option>Softmax</option>
                                         <option>Softplus</option>
                                         <option>Softsign</option>
@@ -376,22 +375,17 @@
                                 <label for="">Dropout</label>
                                 <div class="input-group spinner">
                                     <input type="number" class="form-control text-center" step="0.01" name="Dropout"
-                                        [(ngModel)]="selectedLayerData.dropout">
-                                    <div class="input-group-append">
-                                        <div class="input-group-text cursor-p" (click)="onDropoutRateUpUpdate()"><i
-                                                class="zmdi zmdi-chevron-up"></i></div>
-                                        <div class="input-group-text cursor-p" (click)="onDropoutRateDownUpdate()"><i
-                                                class="zmdi zmdi-chevron-down"></i></div>
-                                    </div>
+                                        [(ngModel)]="selectedLayerData.dropout" (change)="checkLSTMDropoutupdate()"
+                                        name="dropoutLSTM">
                                 </div>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col">
+                            <div class="col-6">
                                 <label for="">Return Sequences</label>
                                 <div class="clearfix">
                                     <select class="form-control show-tick ms" style="padding: 9px;"
-                                        name="activationFunction" [(ngModel)]="selectedLayerData.returnSequence">
+                                        [(ngModel)]="selectedLayerData.returnSequence" name="returnseq">
                                         <option>True</option>
                                         <option>False</option>
                                     </select>
@@ -403,6 +397,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" (click)=deleteLayer()>Remove</button>
             </div>
         </div>
     </div>
@@ -492,14 +487,6 @@
                                 <div class="input-group spinner">
                                     <input type="number" class="form-control text-center" name="units"
                                         [(ngModel)]="newLayerData.LSTM.units">
-                                    <div class="input-group-append">
-                                        <!-- <span class="input-group-text col" style="display: grid;"> -->
-                                        <div class="input-group-text cursor-p" (click)="onSpinUp()"><i
-                                                class="zmdi zmdi-chevron-up"></i></div>
-                                        <div class="input-group-text cursor-p" (click)="onSpinDown()"><i
-                                                class="zmdi zmdi-chevron-down"></i></div>
-                                        <!-- </span> -->
-                                    </div>
                                 </div>
                             </div>
 
@@ -509,13 +496,12 @@
                                     <select class="form-control show-tick ms" style="padding: 9px;"
                                         name="activationFunctionLSTM"
                                         [(ngModel)]="newLayerData.LSTM.activationFunction">
-                                        <option>Default</option>
+                                        <option>Tanh</option>
                                         <option>Relu</option>
                                         <option>Sigmoid</option>
                                         <option>Softmax</option>
                                         <option>Softplus</option>
                                         <option>Softsign</option>
-                                        <option>Tanh</option>
                                         <option>Selu</option>
                                         <option>Elu</option>
                                         <option>Exponential</option>
@@ -530,9 +516,8 @@
                                     <select class="form-control show-tick ms" style="padding: 9px;"
                                         name="reccActivationFunctionLSTM"
                                         [(ngModel)]="newLayerData.LSTM.recurrentActivation">
-                                        <option>Default</option>
-                                        <option>Relu</option>
                                         <option>Sigmoid</option>
+                                        <option>Relu</option>
                                         <option>Softmax</option>
                                         <option>Softplus</option>
                                         <option>Softsign</option>
@@ -547,18 +532,12 @@
                                 <label for="">Dropout</label>
                                 <div class="input-group spinner">
                                     <input type="number" class="form-control text-center" step="0.01" name="Dropout"
-                                        [(ngModel)]="newLayerData.LSTM.dropout">
-                                    <div class="input-group-append">
-                                        <div class="input-group-text cursor-p" (click)="onDropoutUp()"><i
-                                                class="zmdi zmdi-chevron-up"></i></div>
-                                        <div class="input-group-text cursor-p" (click)="onDropoutDown()"><i
-                                                class="zmdi zmdi-chevron-down"></i></div>
-                                    </div>
+                                        [(ngModel)]="newLayerData.LSTM.dropout" (change)=checkLSTMDropout()>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col">
+                            <div class="col-6">
                                 <label for="">Return Sequences</label>
                                 <div class="clearfix">
                                     <select class="form-control show-tick ms" style="padding: 9px;"
@@ -621,7 +600,7 @@
                     <pre><code [innerHtml]="code" class="language-python"></code></pre>
                 </div>
                 <div class="row col" *ngIf="!export_code">
-                    Downloading file
+                    <button class="btn btn-primary" (click)="downloadModel()">Download</button>
                 </div>
             </div>
             <div class="modal-footer">

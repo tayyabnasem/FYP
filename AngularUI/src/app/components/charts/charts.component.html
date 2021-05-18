@@ -24,9 +24,9 @@
                         <h2>Data Visualization</h2>
                     </div>
                     <div class="col-lg-5 col-md-6 col-sm-12">
-                        <button class="btn btn-primary btn-icon float-right right_icon_toggle_btn" type="button"
-                            (click)="goToModel()" title="Next">
-                            <i class="zmdi zmdi-arrow-right"></i>
+                        <button class="btn btn-success float-right" type="button" *ngIf="disable" (click)="onImport()">
+                            <i class="zmdi zmdi-plus"></i>
+                            Import Project
                         </button>
                     </div>
                 </div>

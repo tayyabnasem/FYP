@@ -26,6 +26,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { ModelDLComponent } from './components/model-dl/model-dl.component';
 import { ModelMLComponent } from './components/model-ml/model-ml.component';
+import { SearchComponent } from './components/search/search.component';
 
 
 
@@ -46,6 +47,7 @@ import { ModelMLComponent } from './components/model-ml/model-ml.component';
         NavbarComponent,
         ModelDLComponent,
         ModelMLComponent,
+        SearchComponent,
     ],
     imports: [
         BrowserModule,

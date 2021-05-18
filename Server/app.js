@@ -33,6 +33,11 @@ const saveHyperparameterroute = require('./Routes/savehyperparametersroute')
 const getProjectDomainroute = require('./Routes/checkprojecttype')
 const downloadModelroute = require('./Routes/downloadtrainedmodelroute')
 const getModelCoderoute = require('./Routes/getmodelcode')
+const searchRoute = require('./Routes/searchroute')
+const disableRoute = require('./Routes/disableroute')
+const importProjectRoute = require('./Routes/importprojectroute')
+const getUserroute = require('./Routes/getusernameroute')
+
 
 var jsonParser = bodyParser.json()
 
@@ -63,5 +68,9 @@ app.use('/saveHyperparameter', saveHyperparameterroute)
 app.use('/getProjectDomain', getProjectDomainroute)
 app.use('/downloadModel', downloadModelroute)
 app.use('/getModelCode', getModelCoderoute)
+app.use('/searchProjects', searchRoute)
+app.use('/disableFields', disableRoute)
+app.use('/importprojectroute', importProjectRoute)
+app.use('/getUsername', getUserroute)
 
 app.use(express.static(__dirname));

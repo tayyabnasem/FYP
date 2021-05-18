@@ -22,6 +22,7 @@ export class PreprocessComponent implements OnInit {
 		itemAlias: 'file',
 		allowedMimeType: ['text/csv', 'application/vnd.ms-excel']
 	});
+	disable: boolean
 	isOpen: boolean
 	columnsData: any
 	model: any
@@ -40,6 +41,7 @@ export class PreprocessComponent implements OnInit {
 
 	constructor(private apicall: ApicallService, private router: Router, private sharingService: ShareDataService, private route: ActivatedRoute) {
 		this.isOpen = false;
+		this.disable = false;
 		this.columnsData = []
 		this.model = {}
 		this.statsToDisplay = {
@@ -94,8 +96,16 @@ export class PreprocessComponent implements OnInit {
 
 		this.route.queryParams.subscribe(params => {
 			this.project_id = params.project
-			this.uploader.setOptions({ url: 'http://localhost:3000/uploadFile?project='+this.project_id });
+			this.uploader.setOptions({ url: 'http://localhost:3000/uploadFile?project=' + this.project_id });
 			console.log(this.project_id)
+			let url = "http://localhost:3000/disableFields?project=" + this.project_id
+			console.log(url)
+			this.apicall.getData(url).subscribe((response: any) => {
+				console.log(response)
+				if (response.data == false) {
+					this.disable = !response.data;
+				}
+			})
 		});
 
 		this.getDatasetStistics()
@@ -196,7 +206,7 @@ export class PreprocessComponent implements OnInit {
 
 		this.apicall.postData(filterDataUrl, filter_opt_data).subscribe((data) => {
 			console.log("Data", data)
-			this.router.navigate(['/visualize'], {queryParamsHandling: 'preserve'})
+			this.router.navigate(['/visualize'], { queryParamsHandling: 'preserve' })
 		})
 	}
 
@@ -206,6 +216,13 @@ export class PreprocessComponent implements OnInit {
 
 	logModel() {
 		console.log(this.model)
+	}
+	onImport() {
+		let url = "http://localhost:3000/importprojectroute?project=" + this.project_id
+		console.log(url)
+		this.apicall.getData(url).subscribe((response: any) => {
+			console.log(response)
+		})
 	}
 
 }

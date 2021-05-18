@@ -67,7 +67,7 @@ export class SignupComponent implements OnInit {
       if (data.text === "Username already exists") {
         this.flags.userExists = true
       } else if (data.text === "OK") {
-        this.router.navigateByUrl('signin')
+        this.router.navigateByUrl('dashboard')
       }
     });
   }

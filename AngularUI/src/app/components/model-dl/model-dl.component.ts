@@ -26,8 +26,8 @@ export class ModelDLComponent implements OnInit {
 		},
 		LSTM: {
 			units: 1,
-			activationFunction: "Default",
-			recurrentActivation: "Default",
+			activationFunction: "Tanh",
+			recurrentActivation: "Sigmoid",
 			dropout: 0,
 			returnSequence: "False"
 		}
@@ -62,6 +62,7 @@ export class ModelDLComponent implements OnInit {
 	accuracy_image: any = ""
 	loss_image: any = ""
 	export_code: Boolean = true
+	disable: boolean = false
 
 
 	constructor(private apiCall: ApicallService, private route: ActivatedRoute, private sharedData: ShareDataService) {
@@ -82,6 +83,13 @@ export class ModelDLComponent implements OnInit {
 				console.log(this.layerModel)
 				if (Object.keys(response.data.hyperparameters).length !== 0) {
 					this.trainingData = response.data.hyperparameters
+				}
+			})
+			url = "http://localhost:3000/disableFields?project=" + this.project_id
+			this.apiCall.getData(url).subscribe((response: any) => {
+				console.log(response)
+				if (response.data == false) {
+					this.disable = !response.data;
 				}
 			})
 		});
@@ -173,6 +181,16 @@ export class ModelDLComponent implements OnInit {
 		this.trainingData.validation_split > 90 ? this.trainingData.validation_split = 90 : this.trainingData.validation_split
 	}
 
+	checkLSTMDropout() {
+		this.newLayerData.LSTM.dropout < 0 ? this.newLayerData.LSTM.dropout = 0 : this.newLayerData.LSTM.dropout
+		this.newLayerData.LSTM.dropout > 1 ? this.newLayerData.LSTM.dropout = 1 : this.newLayerData.LSTM.dropout
+	}
+
+	checkLSTMDropoutupdate() {
+		this.selectedLayerData.dropout < 0 ? this.selectedLayerData.dropout = 0 : this.selectedLayerData.dropout
+		this.selectedLayerData.dropout > 1 ? this.selectedLayerData.dropout = 1 : this.selectedLayerData.dropout
+	}
+
 	addLayer() {
 		var temp: any = { layerName: this.newLayerData.layerName }
 		for (var prop in this.newLayerData[this.newLayerData.layerName]) {
@@ -205,16 +223,18 @@ export class ModelDLComponent implements OnInit {
 		this.selectedLayerData = item
 	}
 
+	deleteLayer() {
+		this.layerModel.splice(this.selectedLayerIndex, 1)
+		this.layerModel = [...this.layerModel]
+	}
+
 	switchExportMethod() {
 		this.export_code = true
-		this.code = this.sharedData.getCode()
-		if (!this.code) {
-			let url = "http://localhost:3000/getModelCode?project=" + this.project_id
-			this.apiCall.getData(url).subscribe((response: any) => {
-				this.code = Prism.highlight(response.data, Prism.languages['python'])
-				this.sharedData.setCode(this.code)
-			})
-		}
+		let url = "http://localhost:3000/getModelCode?project=" + this.project_id
+		this.apiCall.getData(url).subscribe((response: any) => {
+			this.code = Prism.highlight(response.data, Prism.languages['python'])
+			this.sharedData.setCode(this.code)
+		})
 	}
 
 	switchExportMethodtoModel() {
@@ -249,6 +269,14 @@ export class ModelDLComponent implements OnInit {
 	saveHyperparameters() {
 		let url = "http://localhost:3000/saveHyperparameter?project=" + this.project_id
 		this.apiCall.postData(url, this.trainingData).subscribe((response) => {
+			console.log(response)
+		})
+	}
+
+	onImport() {
+		let url = "http://localhost:3000/importprojectroute?project=" + this.project_id
+		console.log(url)
+		this.apiCall.getData(url).subscribe((response: any) => {
 			console.log(response)
 		})
 	}

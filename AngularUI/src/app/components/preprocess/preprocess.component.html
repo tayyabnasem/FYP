@@ -23,6 +23,12 @@
                     <div class="col-lg-7 col-md-6 col-sm-12">
                         <h2>Pre Processing</h2>
                     </div>
+                    <div class="col-lg-5 col-md-6 col-sm-12">
+                        <button class="btn btn-success float-right" type="button" *ngIf="disable" (click)="onImport()">
+                            <i class="zmdi zmdi-plus"></i>
+                            Import Project
+                        </button>
+                    </div>
                 </div>
             </div>
             <div class="container-fluid">
@@ -39,10 +45,10 @@
                                         <div class="col text-center">
                                             <label for="upload-photo" class="btn btn-primary">Browse for file</label>
                                             <input type="file" name="photo" id="upload-photo" ng2FileSelect
-                                                [uploader]="uploader" accept=".csv, .json" />
+                                                [uploader]="uploader" accept=".csv" />
                                             <button type="button" class="btn btn-success btn-s"
                                                 (click)="uploader.uploadAll()"
-                                                [disabled]="!uploader.getNotUploadedItems().length">
+                                                [disabled]="!uploader.getNotUploadedItems().length || disable">
                                                 Upload
                                             </button>
                                             <button #hiddenBtn [hidden]="true" data-toggle="modal"
@@ -156,7 +162,7 @@
                                                             </tr>
                                                         </tbody>
                                                     </table>
-                                                    <button type="submit" class="btn btn-primary float-right">Apply
+                                                    <button type="submit" class="btn btn-primary float-right" [disabled]="disable">Apply
                                                         Changes</button>
                                                 </form>
                                             </div>

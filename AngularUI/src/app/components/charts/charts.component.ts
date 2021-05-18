@@ -15,7 +15,9 @@ export class ChartsComponent implements OnInit {
 	isBGVisible: boolean
 	isSPVisible: boolean
 	isLGVisible: boolean
+	disable: boolean = false
 	columns: Array<String> = []
+	project_id: any
 	model: any = {
 		x: 'Select Column',
 		y: 'Select Column',
@@ -33,12 +35,22 @@ export class ChartsComponent implements OnInit {
 	ngOnInit(): void {
 
 		this.route.queryParams.subscribe(params => {
+			this.project_id = params.project
 			let url = "http://localhost:3000/getColumns?project=" + params.project
 			this.apicall.getData(url).subscribe((data: any) => {
 				console.log(data)
 				this.columns = data.columns
 			})
+			url = "http://localhost:3000/disableFields?project=" + this.project_id
+			console.log(url)
+			this.apicall.getData(url).subscribe((response:any) => {
+				console.log(response)
+				if (response.data==false){
+					this.disable=!response.data;
+				}
+			})
 		});
+
 	}
 
 	createPlot() {
@@ -74,8 +86,12 @@ export class ChartsComponent implements OnInit {
 		this.isSPVisible = false
 	}
 
-	goToModel(){
-		this.router.navigate(['model'], {queryParamsHandling: 'preserve'})
+	onImport() {
+		let url = "http://localhost:3000/importprojectroute?project=" + this.project_id
+		console.log(url)
+		this.apicall.getData(url).subscribe((response: any) => {
+			console.log(response)
+		})
 	}
 
 }
