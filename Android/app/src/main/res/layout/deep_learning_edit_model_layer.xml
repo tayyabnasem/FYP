@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_background_color">
+
+    <LinearLayout
+        android:id="@+id/classificationLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/white"
+        android:padding="10dp">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="5dp">
+
+            <TextView
+                android:id="@+id/layer_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:text="Dense"
+                android:textColor="@color/input_head"
+                android:textSize="18sp" />
+\
+            <LinearLayout
+                android:id="@+id/denseLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:orientation="vertical">
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:text="Units"
+                    android:textColor="@color/input_head"
+                    android:textSize="14sp" />
+
+                <EditText
+                    android:id="@+id/inputDenseUnits"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/field_round_border"
+                    android:inputType="number"
+                    android:textSize="16sp"
+                    android:text="1"
+                    android:paddingVertical="5dp"
+                    android:paddingHorizontal="15dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:text="Activation Function"
+                    android:textColor="@color/input_head"
+                    android:textSize="14sp" />
+
+                <Spinner
+                    android:id="@+id/spinnerDenseActivationFunction"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/field_round_border"
+                    android:entries="@array/dl_activation_function"
+                    android:padding="5dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/dropoutLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:text="Dropout rate"
+                    android:textColor="@color/input_head"
+                    android:textSize="14sp" />
+
+                <EditText
+                    android:id="@+id/inputDropoutRate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/field_round_border"
+                    android:inputType="numberDecimal"
+                    android:textSize="16sp"
+                    android:text="0.01"
+                    android:paddingVertical="5dp"
+                    android:paddingHorizontal="15dp"/>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/lstmLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:text="Units"
+                    android:textColor="@color/input_head"
+                    android:textSize="14sp" />
+
+                <EditText
+                    android:id="@+id/inputLSTMUnits"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/field_round_border"
+                    android:inputType="number"
+                    android:textSize="16sp"
+                    android:text="1"
+                    android:paddingVertical="5dp"
+                    android:paddingHorizontal="15dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="5dp"
+                    android:text="Activation Function"
+                    android:textColor="@color/input_head"
+                    android:textSize="14sp" />
+
+                <Spinner
+                    android:id="@+id/spinnerLSTMActivation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/field_round_border"
+                    android:entries="@array/dl_lstm_activation_function"
+                    android:inputType="number"
+                    android:padding="5dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:text="Return Sequences"
+                    android:textColor="@color/input_head"
+                    android:textSize="14sp" />
+
+                <Spinner
+                    android:id="@+id/spinnerReturnSequence"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/field_round_border"
+                    android:entries="@array/ml_regression_linear_normalize"
+                    android:padding="5dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="5dp"
+                    android:text="Dropout"
+                    android:textColor="@color/input_head"
+                    android:textSize="14sp" />
+
+                <EditText
+                    android:id="@+id/inputLSTMDropout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/field_round_border"
+                    android:inputType="numberDecimal"
+                    android:textSize="16sp"
+                    android:text="0"
+                    android:paddingVertical="5dp"
+                    android:paddingHorizontal="15dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:text="Recurrent Activation Function"
+                    android:textColor="@color/input_head"
+                    android:textSize="14sp" />
+                <Spinner
+                    android:id="@+id/spinnerLSTM_RAF"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/field_round_border"
+                    android:entries="@array/dl_lstm_activation_function"
+                    android:inputType="numberDecimal"
+                    android:padding="5dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right">
+                <Button
+                    android:id="@+id/cancel_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Close"
+                    android:backgroundTint="@color/cancel_button"
+                    android:layout_margin="3dp"/>
+                <Button
+                    android:id="@+id/remove_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/danger"
+                    android:text="Remove"
+                    android:layout_margin="3dp"/>
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

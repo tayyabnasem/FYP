@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="impute_int_with_spin_options">
+        <item>Mean</item>
+        <item>Median</item>
+    </string-array>
+    <string-array name="batch_size_opt">
+        <item>16</item>
+        <item>32</item>
+        <item>64</item>
+        <item>128</item>
+        <item>256</item>
+        <item>512</item>
+    </string-array>
+    <string-array name="loss_function_opt">
+        <item>Binary Crossentropy</item>
+        <item>Categorical Crossentropy</item>
+        <item>Mean Absolute Error</item>
+        <item>Mean Absolute Percentage Error</item>
+        <item>Mean Squared Error</item>
+        <item>Mean Squared Logarithmic Error</item>
+    </string-array>
+    <string-array name="optimizer_opt">
+        <item>Adam</item>
+        <item>SGD</item>
+        <item>RMSprop</item>
+        <item>Adadelta</item>
+        <item>Adagrad</item>
+        <item>Adamax</item>
+        <item>Nadam</item>
+        <item>Ftrl</item>
+    </string-array>
+    <string-array name="categorize_output_opt">
+        <item>Yes</item>
+        <item>No</item>
+    </string-array>
+    <string-array name="ml_classification_algorithms">
+        <item>Gaussian Naive Bayes</item>
+        <item>Multinomial Naive Bayes</item>
+        <item>Bernoulli Naive Bayes</item>
+        <item>Decision Tree Classifier</item>
+        <item>Random Forest</item>
+        <item>Logistic Regression</item>
+    </string-array>
+    <string-array name="ml_classification_decision_tree_criterion">
+        <item>Gini</item>
+        <item>Entropy</item>
+    </string-array>
+    <string-array name="ml_classification_decision_tree_splitter">
+        <item>Best</item>
+        <item>Random</item>
+    </string-array>
+    <string-array name="ml_classification_random_forest_criterion">
+        <item>Gini</item>
+        <item>Entropy</item>
+    </string-array>
+    <string-array name="ml_classification_logistic_regression_penalty">
+        <item>L2</item>
+        <item>L1</item>
+        <item>Elasticnet</item>
+        <item>None</item>
+    </string-array>
+    <string-array name="ml_classification_logistic_regression_multiclass">
+        <item>Auto</item>
+        <item>Ovr</item>
+        <item>Multinomial</item>
+    </string-array>
+    <string-array name="ml_classification_logistic_regression_solver">
+        <item>LBFGS</item>
+        <item>Newton-cg</item>
+        <item>Liblinear</item>
+        <item>SAG</item>
+        <item>SAGA</item>
+    </string-array>
+
+    <string-array name="ml_regression_algorithms">
+        <item>Linear Regression</item>
+        <item>Decision Tree Regressor</item>
+        <item>Random Forest</item>
+    </string-array>
+    <string-array name="ml_regression_linear_normalize">
+        <item>False</item>
+        <item>True</item>
+    </string-array>
+    <string-array name="ml_regression_random_criterion">
+        <item>Mean Squared Error</item>
+        <item>Mean Absolute Error</item>
+    </string-array>
+
+    <string-array name="ml_clustering_algorithms">
+        <item>K-means</item>
+    </string-array>
+    <string-array name="ml_clustering_kmeans_initial_points">
+        <item>Random</item>
+        <item>K-means++</item>
+    </string-array>
+    <string-array name="ml_clustering_kmeans_algorithm">
+        <item>Auto</item>
+        <item>Full</item>
+        <item>Elkan</item>
+    </string-array>
+    <string-array name="dl_model_new_layers">
+        <item>Dense</item>
+        <item>Dropout</item>
+        <item>LSTM</item>
+    </string-array>
+    <string-array name="dl_activation_function">
+        <item>Default</item>
+        <item>Relu</item>
+        <item>Sigmoid</item>
+        <item>Softmax</item>
+        <item>Softplus</item>
+        <item>Softsign</item>
+        <item>Tanh</item>
+        <item>Selu</item>
+        <item>Elu</item>
+        <item>Exponential</item>
+    </string-array>
+    <string-array name="dl_lstm_activation_function">
+        <item>Tanh</item>
+        <item>Relu</item>
+        <item>Sigmoid</item>
+        <item>Softmax</item>
+        <item>Softplus</item>
+        <item>Softsign</item>
+        <item>Selu</item>
+        <item>Elu</item>
+        <item>Exponential</item>
+    </string-array>
+    <string-array name="dl_lstm_recurrent_activation_function">
+        <item>Sigmoid</item>
+        <item>Relu</item>
+        <item>Softmax</item>
+        <item>Softplus</item>
+        <item>Softsign</item>
+        <item>Tanh</item>
+        <item>Selu</item>
+        <item>Elu</item>
+        <item>Exponential</item>
+    </string-array>
+    <string-array name="ml_regression_tree_criterion">
+        <item>MSE</item>
+        <item>MAE</item>
+        <item>Poisson</item>
+    </string-array>
+
+
+
+</resources>
