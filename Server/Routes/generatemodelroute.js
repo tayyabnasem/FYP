@@ -28,6 +28,8 @@ router.post('/', function (req, res) {
 	python.stdout.on('end', function () {
 		var file_path = parsedData.replace("\r\n", "");
 		console.log("Updated File path:", file_path)
+		let data_to_send = {}
+
 		const python1 = spawn('python', [file_path])
 		python1.stdout.on('data', (data) => {
 			data = data.toString()
@@ -64,8 +66,12 @@ router.post('/', function (req, res) {
 				let temp = data.split(":")
 				//console.log(temp)
 				if (temp[0] == 'Model Accuracy') {
+					data_to_send['model_accuracy_img'] = temp[1].slice(1, -10)
+					data_to_send['model_loss_img'] = temp[2].slice(1, -5)
+					data_to_send['model_accuracy'] = temp[3].slice(1,-9)
+					data_to_send['model_test_accuracy'] = temp[4].slice(1,-2)
 					req.io.emit('model_accuracy', temp[1].slice(1, -10))
-					req.io.emit('model_loss', temp[2].slice(1, -2))
+					req.io.emit('model_loss', temp[2].slice(1, -9))
 				} else {
 					req.io.emit('logs', data)
 				}
@@ -74,7 +80,7 @@ router.post('/', function (req, res) {
 
 		python1.stdout.on('end', () => {
 			data = data.toString()
-			res.send({ text: "OK" })
+			res.send({ data: data_to_send, error: "None" })
 		})
 
 		python1.stderr.on('data', (data) => {

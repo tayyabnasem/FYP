@@ -1,7 +1,9 @@
 const router = require('express').Router();
-
 const { spawn } = require('child_process');
-const { cwd } = require('process');
+const MongoClient = require('mongodb').MongoClient;
+const ObjectId = require('mongodb').ObjectId
+
+const url = "mongodb://localhost:27017/";
 
 router.post('/', function (req, res) {
 	var data = req.body
@@ -23,23 +25,44 @@ router.post('/', function (req, res) {
 	});
 
 	python.stdout.on('end', function () {
+		let training_results = ""
 		var file_path = parsedData.replace("\r\n", "");
 		console.log("Updated File path:",file_path)
 		const python1 = spawn('python', [file_path])
+		MongoClient.connect(url, { useUnifiedTopology: true }, function (err, client) {
+			if (err) {
+				res.send({ text: "None", error: err })
+			} else {
+				var database = client.db("FYP")
+				try {
+					const query = { _id: new ObjectId(req.query.project) }
+					database.collection("Projects").updateOne(query, { $set: { "model_file": file_path } }, (err, result) => {
+						client.close()
+						if (err) {
+							console.log(err)
+						}
+					})
+				} catch (Exception) {
+					console.log(Exception)
+				}
+			}
+		});
 		python1.stdout.on('data', (data) =>{
 			data = data.toString()
 			console.log(data)
+			training_results += data
 			req.io.emit('logs', data)
 		})
 
 		python1.stdout.on('end', () =>{
 			data = data.toString()
-			res.send({ text: "OK" })
+			res.send({ data: training_results })
 		})
 
 		python1.stderr.on('data', (data) =>{
 			data = data.toString()
 			console.log("Error:", data)
+			training_results += data
 			req.io.emit('logs', data)
 		})
 	})

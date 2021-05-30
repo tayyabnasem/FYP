@@ -79,8 +79,9 @@ export class ModelDLComponent implements OnInit {
 			})
 			url = 'http://localhost:3000/getModelInfo?project=' + this.project_id
 			this.apiCall.getData(url).subscribe((response: any) => {
+				console.log("Received Model: ",response)
 				this.layerModel = response.data.layers
-				console.log(this.layerModel)
+				//console.log(this.layerModel)
 				if (Object.keys(response.data.hyperparameters).length !== 0) {
 					this.trainingData = response.data.hyperparameters
 				}
@@ -100,16 +101,16 @@ export class ModelDLComponent implements OnInit {
 			this.traininglogs += data + "<br>"
 		});
 
-		this.socket.on('model_accuracy', (data: any) => {
-			this.accuracy_image = 'http://localhost:3000/' + data
-			console.log("Accuracy Image", JSON.stringify(this.accuracy_image))
-		});
+		// this.socket.on('model_accuracy', (data: any) => {
+		// 	this.accuracy_image = 'http://localhost:3000/' + data
+		// 	console.log("Accuracy Image", JSON.stringify(this.accuracy_image))
+		// });
 
 
-		this.socket.on('model_loss', (data: any) => {
-			this.loss_image = 'http://localhost:3000/' + data
-			console.log("Loss Image", JSON.stringify(this.loss_image))
-		});
+		// this.socket.on('model_loss', (data: any) => {
+		// 	this.loss_image = 'http://localhost:3000/' + data
+		// 	console.log("Loss Image", JSON.stringify(this.loss_image))
+		// });
 		this.code = Prism.highlight(this.code, Prism.languages['python'])
 	}
 
@@ -256,8 +257,13 @@ export class ModelDLComponent implements OnInit {
 		this.loss_image = ""
 		let url = "http://localhost:3000/generatemodel?project=" + this.project_id
 		let dataToSend = { layers: this.layerModel, hyperparameters: this.trainingData }
+		console.log("Training POST Data: ",dataToSend)
 		this.apiCall.postData(url, dataToSend).subscribe((response) => {
 			console.log(response)
+			this.accuracy_image = 'http://localhost:3000/' + response.data.model_accuracy_img
+			console.log("Accuracy Image", JSON.stringify(this.accuracy_image))
+			this.loss_image = 'http://localhost:3000/' + response.data.model_loss_img
+			console.log("Loss Image", JSON.stringify(this.loss_image))
 		})
 	}
 

@@ -116,7 +116,7 @@ export class PreprocessComponent implements OnInit {
 			this.progress = 0
 			this.file_name = file._file.name
 			this.uploader.options.additionalParameter = {
-				project_id: this.project_id,
+				project: this.project_id,
 			};
 		};
 

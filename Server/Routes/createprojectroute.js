@@ -12,10 +12,11 @@ router.post('/', function (req, res) {
 	data['preprocessed_dataset_path'] = ''
 	data['preprocessing_options'] = {}
 	data['data_statistics'] = []
+	data['model_file'] = ""
 	if (data['domain'] == "Deep Learning") {
 		data['model'] = { hyperparameters: {}, layers: [] }
 		data['trained_model'] = ""
-		data['model_file'] = ""
+		
 	} else {
 		data['model'] = { algorithm: "", algo_type: "", parameters: {}}
 	}

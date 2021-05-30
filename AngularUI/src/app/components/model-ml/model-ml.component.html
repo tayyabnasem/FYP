@@ -209,8 +209,9 @@
                                         <div class="clearfix">
                                             <select class="form-control show-tick ms" style="padding: 9px;"
                                                 [(ngModel)]="decision_tree_regressor_params.criterion">
-                                                <option>Gini</option>
-                                                <option>Entropy</option>
+                                                <option>MSE</option>
+                                                <option>MAE</option>
+                                                <option>Poisson</option>
                                             </select>
                                         </div>
                                     </div>
@@ -339,9 +340,36 @@
                             <h2><strong>TRAINING</strong></h2>
                         </div>
                         <pre style="height: 400px; overflow-y: auto;" class="body" [innerHTML]="traininglogs"></pre>
+                        <div *ngIf="trainingComplete" class="col text-center">
+                            <button class="btn btn-success" data-toggle="modal" data-target="#exportModel"
+                                aria-hidden="true" (click)="switchExportMethod()">Export Model</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
+<div class="modal fade" id="exportModel" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="title">Export Model</h4>
+            </div>
+            <div class="tsize modal-body">
+                <div class="row col-6">
+                    <div style="cursor: pointer" class="col border-d active_exp"
+                        >Code
+                    </div>
+                </div>
+                <br>
+                <div class="row col">
+                    <pre><code [innerHtml]="code" class="language-python"></code></pre>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary waves-effect" data-dismiss="modal">CLOSE</button>
+            </div>
+        </div>
+    </div>
+</div>

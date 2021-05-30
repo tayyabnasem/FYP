@@ -17,6 +17,8 @@ for column in data:
     if data[column]['include'] == True:
         columns_to_select.append(column)
 
+print("Selected Columns LIST: ",columns_to_select)
+
 df = df[columns_to_select]
 
 if (over_all_data_options['drop_rows']):

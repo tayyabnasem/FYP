@@ -9,6 +9,7 @@ router.post('/', async function (req, res) {
 	let sess = req.session
 	data = req.body
 	values_to_fill = []
+	sess.filePath = ""
 
 	const python = spawn('python', ['Python Scripts/filterData.py'])
 

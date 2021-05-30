@@ -26,10 +26,12 @@ router.post('/', function (req, res) {
 	var uploadPost = multer({ storage: storage }).single('file');
 	uploadPost(req, res, function (err) {
 		if (err) {
+			console.log(err)
 			return res.end("error uploading file");
 		}
-		let projectID = req.body.project_id
-		console.log(projectID)
+		let projectID = req.query.project
+		let plat = req.query.plat
+		console.log("Req Query :", req.query)
 		let filePath = req.file.path
 
 		const python = spawn('python', ['Python Scripts/getStats.py'])
@@ -75,15 +77,23 @@ router.post('/', function (req, res) {
 								replacewith: ""
 							}
 						};
-						preprocessing_options = { over_all_dataset_options: {drop_rows: true}, column_wise_options: model }
+						preprocessing_options = { over_all_dataset_options: { drop_rows: true }, column_wise_options: model }
 						var database = client.db("FYP")
 						const query = { _id: new ObjectId(projectID) }
-						const options = { $set: { dataset_path: filePath, data_statistics: dataToSend, preprocessed_dataset_path: '',
-						preprocessing_options: preprocessing_options} }
+						const options = {
+							$set: {
+								dataset_path: filePath, data_statistics: dataToSend, preprocessed_dataset_path: '',
+								preprocessing_options: preprocessing_options, "model.hyperparameters":{}
+							}
+						}
 						database.collection("Projects").updateOne(query, options, (err, result) => {
+							if (err) {
+								console.log("Error:", err)
+							}
 							client.close()
-							//console.log(result)
-							sess.filePath = filePath
+							console.log(result)
+
+							sess.filePath = ""
 							res.send({ error: "None", data: dataToSend })
 						})
 					}

@@ -5,6 +5,7 @@ const url = "mongodb://localhost:27017/";
 
 router.get('/', function (req, res) {
 	sess = req.session
+	console.log("Received Session: ",sess)
 	MongoClient.connect(url, { useUnifiedTopology: true }, function (err, client) {
 		if (err) {
 			res.send({ text: "None", error: err })

@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { io } from 'socket.io-client';
-import { ApicallService } from 'src/app/services/apicall.service';
+import { ApicallService } from 'src/app/services/apicall.service'; 
+import 'prismjs/components/prism-python'
+import * as Prism from 'prismjs'
 
 @Component({
     selector: 'app-model-ml',
@@ -36,7 +38,7 @@ export class ModelMLComponent implements OnInit {
         solver: 'LBFGS'
     }
     decision_tree_regressor_params = {
-        criterion: 'Gini',
+        criterion: 'MSE',
         splitter: 'Best'
     }
 
@@ -57,8 +59,12 @@ export class ModelMLComponent implements OnInit {
     classificationValue: any = "Gaussian Naive Bayes"
     regressionValue: any = "Linear Regression"
     clusteringValue: any = "K-means"
+    trainingComplete: Boolean = false
+    export_code: Boolean = true
+    code: any = "[i for i in range(10)]"
 
     constructor(private apiCall: ApicallService, private route: ActivatedRoute) {
+
         this.socket = io('http://localhost:3000');
     }
 
@@ -106,6 +112,7 @@ export class ModelMLComponent implements OnInit {
         let url = "http://localhost:3000/generatemodelml?project=" + this.project_id
         this.apiCall.postData(url, this.model).subscribe((response) => {
             console.log(response)
+            this.trainingComplete = true;
         })
     }
 
@@ -130,4 +137,10 @@ export class ModelMLComponent implements OnInit {
         this.model.algo_type = "Clustering"
         this.model.algorithm = "K-means"
     }
+    switchExportMethod() {
+		let url = "http://localhost:3000/getModelCode?project=" + this.project_id
+		this.apiCall.getData(url).subscribe((response: any) => {
+			this.code = Prism.highlight(response.data, Prism.languages['python'])
+		})
+	}
 }

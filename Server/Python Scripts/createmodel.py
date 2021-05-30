@@ -143,6 +143,9 @@ lines.extend(
         f"filename = '{images_path}/plot'+str(round(time.time() * 1000))+'.png'",
         "print(f'Model Loss: {filename}')",
         "plt.savefig(filename)",
+        "print(f\"Acc: {round(history.history['accuracy'][-1]*100, 2)}\")",
+        "print(f\"Val Acc: {round(history.history['val_accuracy'][-1]*100, 2)}\")"
+
     ]
 )
 

@@ -192,6 +192,13 @@ def regression_algorithms(data, lines):
                 f"\tX_train, X_test, y_train, y_test = train_test_split(X, Y, test_size={(100 - data['parameters']['validation_split']) / 100})",
                 f"\tregressor = LinearRegression(normalize={data['parameters']['normalize']}, fit_intercept={data['parameters']['fit_intercept']}).fit(X_train, y_train)",
                 "\ty_pred = regressor.predict(X_test)",
+                "\tcoefficients = regressor.coef_",
+                "\tprint('*********Model*************')",
+                f"\tprint('Equation: {data['parameters']['output_coulmn']} = ')",
+                "\tfor i, column in enumerate(X.columns.values):",
+                "\t\tprint(f'{column} * {coefficients[i]} + ')",
+                "\tprint(regressor.intercept_, '\\n')",
+                "",
             ]
         )
     elif data["algorithm"] == "Decision Tree Regressor":
@@ -208,19 +215,12 @@ def regression_algorithms(data, lines):
                 f"\tX = df.loc[:, df.columns != '{data['parameters']['output_coulmn']}'].copy()",
                 f"\tY = df['{data['parameters']['output_coulmn']}'].copy()",
                 f"\tX_train, X_test, y_train, y_test = train_test_split(X, Y, test_size={(100 - data['parameters']['validation_split']) / 100})",
-                f"\tregressor = DecisionTreeRegressor().fit(X_train, y_train)",
+                f"\tregressor = DecisionTreeRegressor(criterion='{data['parameters']['criterion'].lower()}', splitter='{data['parameters']['splitter'].lower()}').fit(X_train, y_train)",
                 "\ty_pred = regressor.predict(X_test)",
             ]
         )
     lines.extend(
         [
-            "\tcoefficients = regressor.coef_",
-            "\tprint('*********Model*************')",
-            f"\tprint('Equation: {data['parameters']['output_coulmn']} = ')",
-            "\tfor i, column in enumerate(X.columns.values):",
-            "\t\tprint(f'{column} * {coefficients[i]} + ')",
-            "\tprint(regressor.intercept_, '\\n')",
-            "",
             "\tprint('*********Summary*************')",
             "\tcorr, _ = pearsonr(y_test, y_pred)",
             "\tprint('Pearsons correlation: %.3f' % corr)",
@@ -234,6 +234,7 @@ def regression_algorithms(data, lines):
 
     return lines
 
+
 def clustering_algorithms(data, lines):
     if data["algorithm"] == "K-means":
         lines.extend(
@@ -246,7 +247,7 @@ def clustering_algorithms(data, lines):
                 "\t\t\tdf[column] = preprocessing.LabelEncoder().fit_transform(df[column])",
                 f"\ttrain, test = train_test_split(df, test_size={(100 - data['parameters']['validation_split']) / 100})",
                 f"\tkmeans = KMeans(n_clusters={data['parameters']['clusters']}, init='{data['parameters']['initial_points'].lower()}'"
-                f", max_iter={data['parameters']['max_iter']}, algorithm='{data['parameters']['algorithm'].lower()}').fit(train)", 
+                f", max_iter={data['parameters']['max_iter']}, algorithm='{data['parameters']['algorithm'].lower()}').fit(train)",
                 "\tcluster_centers = kmeans.cluster_centers_",
                 "\tcolumns = df.columns.values",
                 "\tprint('Number of Iterations: ',kmeans.n_iter_)",
@@ -265,10 +266,11 @@ def clustering_algorithms(data, lines):
                 "\t\tcount = sum(map(lambda x : x == cluster_num, pred))",
                 "\t\tprint(f'Cluster : {cluster_num+1}\\t{count} ({round(count/len(pred)*100, 2)} %)')",
                 "except FileNotFoundError:",
-                "\tprint('Must Upload and Preprocess the dataset first')"
+                "\tprint('Must Upload and Preprocess the dataset first')",
             ]
         )
     return lines
+
 
 lines = sys.stdin.readlines()
 filepath = lines[0].replace("\n", "")

@@ -5,7 +5,7 @@ const url = "mongodb://localhost:27017/";
 
 router.post('/', function (req, res) {
 	sess = req.session
-	console.log("Session",sess)
+	console.log("Received Session: ",sess)
 	if (sess.email) {
 		console.log('Logged in User: ', sess.email)
 		res.send({ text: "Already Logged in", error: "None" })
@@ -31,6 +31,7 @@ router.post('/', function (req, res) {
 						dataToReturnInResponse.text = "User does not exist"
 					}
 					client.close()
+					console.log("Updated session:",sess)
 					res.send(dataToReturnInResponse)
 				})
 			}
