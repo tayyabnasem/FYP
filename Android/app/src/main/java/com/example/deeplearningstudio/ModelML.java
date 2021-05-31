@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,8 +46,13 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import prettify.PrettifyParser;
+import syntaxhighlight.ParseResult;
+import syntaxhighlight.Parser;
 
 public class ModelML extends Fragment {
 
@@ -658,9 +664,47 @@ public class ModelML extends Fragment {
             requestWindowFeature(Window.FEATURE_NO_TITLE);
             setContentView(R.layout.export_model_ml);
 
-            TextView codeview = (TextView) findViewById(R.id.code);
-            codeview.setText(code);
+            PrettifyHighlighter highlighter = new PrettifyHighlighter();
+            String highlighted = highlighter.highlight("py", code);
+            TextView codeview = findViewById(R.id.code);
+            codeview.setText(Html.fromHtml(highlighted));
+        }
+    }
 
+    private class PrettifyHighlighter {
+        private final Map<String, String> COLORS = buildColorsMap();
+
+        private static final String FONT_PATTERN = "<font color=\"#%s\">%s</font>";
+
+        private final Parser parser = new PrettifyParser();
+
+        public String highlight(String fileExtension, String sourceCode) {
+            StringBuilder highlighted = new StringBuilder();
+            List<ParseResult> results = parser.parse(fileExtension, sourceCode);
+
+            for (ParseResult result : results) {
+                String type = result.getStyleKeys().get(0);
+                String content = sourceCode.substring(result.getOffset(), result.getOffset() + result.getLength());
+                content = content.replaceAll("\n", "<br>");
+                highlighted.append(String.format(FONT_PATTERN, getColor(type), content));
+            }
+            return highlighted.toString();
+        }
+
+        private String getColor(String type) {
+            return COLORS.containsKey(type) ? COLORS.get(type) : COLORS.get("pln");
+        }
+
+        private Map<String, String> buildColorsMap() {
+            Map<String, String> map = new HashMap<>();
+            map.put("typ", "000000");
+            map.put("kwd", "1990b8");
+            map.put("lit", "c92c2c");
+            map.put("com", "000000");
+            map.put("str", "2f9c0a");
+            map.put("pun", "000000");
+            map.put("pln", "000000");
+            return map;
         }
     }
 }

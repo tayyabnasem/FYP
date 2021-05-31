@@ -1,21 +1,27 @@
 package com.example.deeplearningstudio;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.PermissionChecker;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,7 +38,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
+import com.koushikdutta.ion.ProgressCallback;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -42,6 +50,7 @@ import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -55,12 +64,18 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
+import prettify.PrettifyParser;
+import syntaxhighlight.ParseResult;
+import syntaxhighlight.Parser;
+
+import static androidx.core.content.PermissionChecker.checkSelfPermission;
 
 public class ModelFragment extends Fragment {
 
@@ -117,7 +132,7 @@ public class ModelFragment extends Fragment {
         train_accuracy_val = (TextView) view.findViewById(R.id.train_accuracy_val);
         save_model_butt = (Button) view.findViewById(R.id.save_changes_layers);
         save_hyperparameters_butt = (Button) view.findViewById(R.id.save_changes_hyperparamter);
-        no_layers_text = (TextView)view.findViewById(R.id.no_layers_text);
+        no_layers_text = (TextView) view.findViewById(R.id.no_layers_text);
         seekBar = (SeekBar) view.findViewById(R.id.seekBar);
         training_percent = (TextView) view.findViewById(R.id.trainingPercent);
         testing_percent = (TextView) view.findViewById(R.id.testingPercent);
@@ -128,11 +143,10 @@ public class ModelFragment extends Fragment {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 testing_percent.setText("" + progress + "%");
                 training_percent.setText("" + (100 - progress) + "%");
-                if(progress < 50){
+                if (progress < 50) {
                     training_percent.setText("50%");
                     seekBar.setProgress(50);
-                }
-                else if(progress > 90){
+                } else if (progress > 90) {
                     seekBar.setProgress(90);
                     testing_percent.setText("90%");
                 }
@@ -192,11 +206,11 @@ public class ModelFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 JSONObject data_to_send = new JSONObject();
-                if (recyclerAdapter.layers.isEmpty()){
+                if (recyclerAdapter.layers.isEmpty()) {
                     Toast.makeText(getActivity(), "No Layer exists in the model to train", Toast.LENGTH_SHORT).show();
-                }else if (column_name.getSelectedItem().toString().equals("Select Column")){
+                } else if (column_name.getSelectedItem().toString().equals("Select Column")) {
                     Toast.makeText(getActivity(), "You must select the Output column before training", Toast.LENGTH_SHORT).show();
-                }else{
+                } else {
                     try {
                         data_to_send.put("layers", new JSONArray(recyclerAdapter.layers));
                         JSONObject hyperparameters = new JSONObject();
@@ -235,7 +249,7 @@ public class ModelFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 GetCode req = new GetCode();
-                String url = getResources().getString(R.string.server_url)+"getModelCode?project=" + projectID;
+                String url = getResources().getString(R.string.server_url) + "getModelCode?project=" + projectID;
                 req.execute(url);
             }
         });
@@ -376,10 +390,10 @@ public class ModelFragment extends Fragment {
                 }
                 recyclerAdapter = new ModelLayersAdapter(layers);
                 recyclerView.setAdapter(recyclerAdapter);
-                if (layers.isEmpty()){
+                if (layers.isEmpty()) {
                     no_layers_text.setVisibility(View.VISIBLE);
                     recyclerView.setVisibility(View.GONE);
-                } else{
+                } else {
                     JSONObject hyperparameters = obj.getJSONObject("data").getJSONObject("hyperparameters");
                     epoch.setText(Integer.toString(hyperparameters.getInt("epoch")));
                     learning_rate.setText(Double.toString(hyperparameters.getDouble("learningRate")));
@@ -573,25 +587,24 @@ public class ModelFragment extends Fragment {
         @Override
         protected void onPostExecute(String response) {
             super.onPostExecute(response);
-            training_logs_view.setText(training_logs_view.getText().toString()+"\nTraining Complete");
-            export_model.setVisibility(View.VISIBLE);
+            training_logs_view.setText(training_logs_view.getText().toString() + "\nTraining Complete");
             train_butt.setEnabled(true);
             try {
                 JSONObject obj = new JSONObject(response);
                 String accuracy_img_url = obj.getJSONObject("data").getString("model_accuracy_img");
                 String loss_img_url = obj.getJSONObject("data").getString("model_loss_img");
-                String test_accuracy =obj.getJSONObject("data").getString("model_test_accuracy");
-                String train_accuracy =obj.getJSONObject("data").getString("model_accuracy");
+                String test_accuracy = obj.getJSONObject("data").getString("model_test_accuracy");
+                String train_accuracy = obj.getJSONObject("data").getString("model_accuracy");
                 results_layout.setVisibility(View.VISIBLE);
 
-                train_accuracy_val.setText(train_accuracy_val.getText().toString()+train_accuracy);
-                test_accuracy_val.setText(test_accuracy_val.getText().toString()+test_accuracy);
+                train_accuracy_val.setText(train_accuracy_val.getText().toString() + train_accuracy);
+                test_accuracy_val.setText(test_accuracy_val.getText().toString() + test_accuracy);
                 Ion.with(accuracy_img)
                         .error(R.drawable.app_logo)
-                        .load(getResources().getString(R.string.server_url)+accuracy_img_url);
+                        .load(getResources().getString(R.string.server_url) + accuracy_img_url);
                 Ion.with(loss_img)
                         .error(R.drawable.app_logo)
-                        .load(getResources().getString(R.string.server_url)+loss_img_url);
+                        .load(getResources().getString(R.string.server_url) + loss_img_url);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -969,7 +982,7 @@ public class ModelFragment extends Fragment {
         JSONObject layer_data;
         int index;
 
-        EditLayerDialog(Activity activity, JSONObject layer_data, int index){
+        EditLayerDialog(Activity activity, JSONObject layer_data, int index) {
             super(activity);
             this.layer_data = layer_data;
             this.index = index;
@@ -1031,6 +1044,13 @@ public class ModelFragment extends Fragment {
                     dismiss();
                 }
             });
+
+            cancel_button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dismiss();
+                }
+            });
         }
     }
 
@@ -1058,8 +1078,11 @@ public class ModelFragment extends Fragment {
 
             TextView codeText = (TextView) findViewById(R.id.codeText);
             TextView tmText = (TextView) findViewById(R.id.tmText);
+
+            PrettifyHighlighter highlighter = new PrettifyHighlighter();
+            String highlighted = highlighter.highlight("py", code);
             TextView codeview = (TextView) findViewById(R.id.code);
-            codeview.setText(code);
+            codeview.setText(Html.fromHtml(highlighted));
 
             View codeLine = (View) findViewById(R.id.codeLine);
             View tmLine = (View) findViewById(R.id.tmLine);
@@ -1093,7 +1116,100 @@ public class ModelFragment extends Fragment {
                     input_field.setVisibility(View.GONE);
                 }
             });
+            butt.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (Build.VERSION.SDK_INT > 22) {
+                        if (checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                                == PermissionChecker.PERMISSION_GRANTED) {
+                            Ion.with(getContext())
+                                    .load(getResources().getString(R.string.server_url) + "downloadModel?project=" + projectID)
+                                    .progress(new ProgressCallback() {
+                                        @Override
+                                        public void onProgress(long downloaded, long total) {
+                                            System.out.println("" + downloaded + " / " + total);
+                                        }
+                                    })
+                                    .write(new File("/storage/emulated/0/Download/model.h5"))
+                                    .setCallback(new FutureCallback<File>() {
+                                        @Override
+                                        public void onCompleted(Exception e, File file) {
+                                            e.printStackTrace();
+                                            // download done...
+                                            // do stuff with the File or error
+                                        }
+                                    });
+                        } else {
+                            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                        }
+                    } else {
+                        System.out.println("SDK <= 22");
+                    }
+                }
+            });
 
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (grantResults.length > 0 && grantResults[0] == PermissionChecker.PERMISSION_GRANTED) {
+            System.out.println("Permission: " + permissions[0] + "was " + grantResults[0]);
+            Ion.with(getContext())
+                    .load(getResources().getString(R.string.server_url) + "downloadModel?project=" + projectID)
+                    .progress(new ProgressCallback() {
+                        @Override
+                        public void onProgress(long downloaded, long total) {
+                            System.out.println("" + downloaded + " / " + total);
+                        }
+                    })
+                    .write(new File("/storage/emulated/0/Download/model.h5"))
+                    .setCallback(new FutureCallback<File>() {
+                        @Override
+                        public void onCompleted(Exception e, File file) {
+                            e.printStackTrace();
+                            // download done...
+                            // do stuff with the File or error
+                        }
+                    });
+        }
+    }
+
+    private class PrettifyHighlighter {
+        private final Map<String, String> COLORS = buildColorsMap();
+
+        private static final String FONT_PATTERN = "<font color=\"#%s\">%s</font>";
+
+        private final Parser parser = new PrettifyParser();
+
+        public String highlight(String fileExtension, String sourceCode) {
+            StringBuilder highlighted = new StringBuilder();
+            List<ParseResult> results = parser.parse(fileExtension, sourceCode);
+
+            for (ParseResult result : results) {
+                String type = result.getStyleKeys().get(0);
+                String content = sourceCode.substring(result.getOffset(), result.getOffset() + result.getLength());
+                content = content.replaceAll("\n", "<br>");
+                highlighted.append(String.format(FONT_PATTERN, getColor(type), content));
+            }
+            return highlighted.toString();
+        }
+
+        private String getColor(String type) {
+            return COLORS.containsKey(type) ? COLORS.get(type) : COLORS.get("pln");
+        }
+
+        private Map<String, String> buildColorsMap() {
+            Map<String, String> map = new HashMap<>();
+            map.put("typ", "000000");
+            map.put("kwd", "1990b8");
+            map.put("lit", "c92c2c");
+            map.put("com", "000000");
+            map.put("str", "2f9c0a");
+            map.put("pun", "000000");
+            map.put("pln", "000000");
+            return map;
         }
     }
 }

@@ -17,7 +17,7 @@ export class NavbarComponent implements OnInit {
     let url="http://localhost:3000/getUsername"
     this.apiCall.getData(url).subscribe((response: any) => {
       //console.log(response)
-      this.userName = response.data
+      this.userName = response.data.fullName
     })
   }
 

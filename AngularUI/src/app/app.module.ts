@@ -19,7 +19,7 @@ import { HomeComponent } from './components/home/home.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ProjectlistComponent } from './components/projectlist/projectlist.component';
 import { ApicallService } from './services/apicall.service';
-import { ProfileComponent } from './profile/profile.component';
+import { ProfileComponent } from './components/profile/profile.component';
 import { ModelComponent } from './components/model/model.component';
 import { SortableModule } from '@progress/kendo-angular-sortable';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';

@@ -22,6 +22,13 @@
     <color name="input_color">#495057</color>
     <color name="cancel_button">#888888</color>
     <color name="danger">#dc3545</color>
+    <color name="type">#000000</color>
+    <color name="keyword">#1990b8</color>
+    <color name="lit">#000000</color>
+    <color name="com">#000000</color>
+    <color name="str">#2f9c0a</color>
+    <color name="pun">#000000</color>
+    <color name="pln">#000000</color>
 
 
 

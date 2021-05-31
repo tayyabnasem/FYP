@@ -14,12 +14,12 @@ router.get('/', (req, res) => {
             var database = client.db("FYP")
             try {
                 const query = { _id: new ObjectId(sess.user_database_id) }
-                const options = { projection: { fullName: 1 } }
+                const options = { projection: { fullName: 1, email: 1 } }
                 database.collection("Users").findOne(query, options, (err, result) => {
                     client.close()
                     if (result) {
                         //console.log(result)
-                        res.send({error: "None", data:result.fullName})
+                        res.send({error: "None", data:result})
                     } else {
                         res.send({ error: "User not found", data: {} })
                     }

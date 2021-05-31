@@ -975,8 +975,8 @@
                     android:layout_height="wrap_content"
                     android:backgroundTint="@color/success"
                     android:layout_gravity="center"
-                    android:text="Export"
-                    android:visibility="gone"/>
+                    android:visibility="gone"
+                    android:text="Export" />
             </LinearLayout>
 
         </LinearLayout>

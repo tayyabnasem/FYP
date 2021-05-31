@@ -9,6 +9,7 @@ import { SignupComponent } from './components/signup/signup.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component'
 import { ModelComponent } from './components/model/model.component';
 import { SearchComponent } from './components/search/search.component';
+import { ProfileComponent } from './components/profile/profile.component';
 
 const routes: Routes = [
   { path: '', component: SigninComponent },
@@ -19,7 +20,8 @@ const routes: Routes = [
   { path: 'preprocess', component: PreprocessComponent },
   { path: 'visualize', component: ChartsComponent },
   { path: 'model', component: ModelComponent },
-  { path: 'search', component: SearchComponent }
+  { path: 'search', component: SearchComponent },
+  { path: 'profile', component: ProfileComponent }
 ];
 
 @NgModule({
